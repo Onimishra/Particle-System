@@ -50,10 +50,9 @@ class Emitter {
             this.nextEmit = 1000/(this.rate + Rng.var(this.rateVar));
         }
 
-        this.particles.forEach(p => {
-            p.update(deltaTime, this.force);
-            //draw?
-        })
+        this.particles = this.particles.filter(p => {
+            return p.update(deltaTime, this.force);
+        });
     }
 
     public draw(deltaTime: number) {
@@ -63,7 +62,7 @@ class Emitter {
             js_vbo.push(v.X());
             js_vbo.push(v.Y());
             js_vbo.push(v.Z());
-        })
+        });
         return new Float32Array(js_vbo);
     }
 }

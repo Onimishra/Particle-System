@@ -14,13 +14,14 @@ class Particle {
         this.prevColor = color;
     }
 
-    public update(deltaTime: number, force : Vector){
+    public update(deltaTime: number, force : Vector) : boolean {
         this.prevPos =  this.pos;
         this.pos =      this.pos.add(this.dir.mul(deltaTime));
         this.dir =      this.dir.add(force.mul(deltaTime));
         this.prevColor= this.color;
         this.color =    new  Color();
         this.life -= deltaTime;
+        return this.life > 0;
     }
 
     public collectDrawData() : Vector {
