@@ -2,8 +2,8 @@
  * Created by mvie on 06/11/14.
  */
 /// <reference path="Particle.ts" />
-/// <reference path="Vector.ts" />
-/// <reference path="Rng.ts" />
+/// <reference path="../Utils/Vector.ts" />
+/// <reference path="../Utils/Rng.ts" />
 
 class Emitter {
     constructor(
@@ -55,8 +55,8 @@ class Emitter {
         });
     }
 
-    public draw(deltaTime: number) {
-        var js_vbo = [];
+    public collectDrawData(deltaTime: number) {
+        var js_vbo = [1.0, 1.0, 1.0];
         this.particles.forEach(p => {
             var v = p.collectDrawData();
             js_vbo.push(v.X());

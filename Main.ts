@@ -1,10 +1,11 @@
 /**
  * Created by mvie on 06/11/14.
  */
-/// <reference path="Emitter.ts" />
+/// <reference path="Particle-System/Emitter.ts" />
 
 (function() {
-    var context: Object, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
+    var gl, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
+    var emitterVertexBuffer;
 
     function loop(timestamp: number) {
         if(lastFrameTime === undefined) lastFrameTime = timestamp;
@@ -16,7 +17,8 @@
     function render(deltaTime: number) {
         emitter.update(deltaTime);
 
-        emitter.draw(deltaTime);
+        var vertices = emitter.collectDrawData(deltaTime);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
@@ -25,7 +27,12 @@
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
-    context = canvas.getContext("webgl", {});
+    gl = canvas.getContext("webgl", {});
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
 
     emitter = new Emitter(Vector.Zero, 1000, 5, 5);
 

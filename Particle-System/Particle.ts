@@ -1,5 +1,5 @@
-/// <reference path="Vector.ts"/>
-/// <reference path="Color.ts"/>
+/// <reference path="../Utils/Vector.ts"/>
+/// <reference path="../Utils/Color.ts"/>
 
 class Particle {
     public prevPos : Vector;
