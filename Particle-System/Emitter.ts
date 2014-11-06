@@ -30,7 +30,7 @@ class Emitter {
     private particles : Particle[];
 
     private emit() {
-        console.log(new Date().getTime()/1000);
+        //console.log(new Date().getTime()/1000);
         var direction = Vector.direction(this.pitch + Rng.var(this.pitchVar), this.yaw + Rng.var(this.yawVar));
         this.particles.push( new Particle(
             this.position,
@@ -52,7 +52,6 @@ class Emitter {
 
         this.particles.forEach(p => {
             p.update(deltaTime, this.force);
-            //draw?
         })
     }
 
@@ -63,7 +62,7 @@ class Emitter {
             js_vbo.push(v.X());
             js_vbo.push(v.Y());
             js_vbo.push(v.Z());
-        })
-        return new Float32Array(js_vbo);
+        });
+        return js_vbo;
     }
 }
