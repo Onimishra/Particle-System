@@ -1,4 +1,5 @@
 class Vector {
+    public static Zero : Vector = new Vector(0,0,0);
     public constructor (
         private x : number,
         private y : number,
@@ -12,7 +13,10 @@ class Vector {
     public sub(v : Vector) : Vector {
         return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
     }
-    public static Direction(pitch : number, yaw : number) : Vector {
+    public mul(a : number) : Vector {
+        return new Vector(this.x * a, this.y * a, this.z * a);
+    }
+    public static direction(pitch : number, yaw : number) : Vector {
         return new Vector(
             -Math.sin(yaw) * Math.cos(pitch),
             Math.sin(pitch),
