@@ -50,9 +50,9 @@ class Emitter {
             this.nextEmit = 1000/(this.rate + Rng.var(this.rateVar));
         }
 
-        this.particles.forEach(p => {
-            p.update(deltaTime, this.force);
-        })
+        this.particles = this.particles.filter(p => {
+            return p.update(deltaTime, this.force);
+        });
     }
 
     public collectDrawData(deltaTime: number) {
