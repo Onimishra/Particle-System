@@ -17,11 +17,23 @@
     function render(deltaTime: number) {
         emitter.update(deltaTime);
 
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
         var vertices = emitter.collectDrawData(deltaTime);
+        var vertices = [
+            0.0,  1.0,  0.0,
+            -1.0, -1.0,  0.0,
+            1.0, -1.0,  0.0
+        ];
+        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -7.0]);
         gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
+
+        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         gl.vertexAttribPointer(gl.getAttribLocation(shaderProgram, "aVertexPosition"), 3, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(gl.POINTS, 0, vertices.length/3);
+        gl.drawArrays(gl.TRIANGLES, 0, vertices.length/3); 
     }
 
     var shaderProgram;
@@ -92,19 +104,15 @@
     gl.enable(gl.DEPTH_TEST);
 
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     var pMatrix = mat4.create(), mvMatrix = mat4.create();
 
-    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+    mat4.perspective(pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
     mat4.identity(mvMatrix);
 
-    initShaders();
-
-    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-
     emitterVertexBuffer = gl.createBuffer();
+
+    initShaders();
 
     emitter = new Emitter(Vector.Zero, 1000, 5, 5);
 
