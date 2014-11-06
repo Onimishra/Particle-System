@@ -7,21 +7,27 @@
     var context: Object, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
 
     function loop(timestamp: number) {
+        if(lastFrameTime === undefined) lastFrameTime = timestamp;
         requestAnimationFrame(loop);
         render(timestamp - lastFrameTime);
+        lastFrameTime = timestamp;
     }
 
     function render(deltaTime: number) {
         emitter.update(deltaTime);
+
+        emitter.draw(deltaTime);
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = 512;
+    canvas.height = 300;
     canvas.width = 512;
+    canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
     context = canvas.getContext("webgl", {});
-    emitter = new Emitter();
-    lastFrameTime = new Date().getTime();
+
+    emitter = new Emitter(Vector.Zero, 1000, 3, 1);
+
     requestAnimationFrame(loop);
 })();

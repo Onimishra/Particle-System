@@ -12,7 +12,7 @@ class Emitter {
         private rate : number,
         private rateVar : number
     ) {
-        this.particles = new Particle[this.limit];
+        this.particles = [];
     }
     //Particle customization variables
     private pitch : number = 0;
@@ -34,8 +34,7 @@ class Emitter {
             this.position,
             direction.mul(this.speed + Rng.var(this.speedVar)),
             this.life + Rng.var(this.lifeVar),
-            new Color(),
-            this.force
+            new Color()
         ) );
     }
 
@@ -43,8 +42,19 @@ class Emitter {
 
 
         this.particles.forEach(p => {
-            p.update(deltaTime);
+            p.update(deltaTime, this.force);
             //draw?
         })
+    }
+
+    public draw(deltaTime: number) {
+        var js_vbo = [];
+        this.particles.forEach(p => {
+            var v = p.collectDrawData();
+            js_vbo.push(v.X());
+            js_vbo.push(v.Y());
+            js_vbo.push(v.Z());
+        })
+        return new Float32Array(js_vbo);
     }
 }
