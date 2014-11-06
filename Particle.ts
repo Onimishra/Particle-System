@@ -8,8 +8,7 @@ class Particle {
         public dir : Vector,
         public life : number,
         public color : Color,
-        public prevColor : Color,
-        public lifeTime : number
+        public prevColor : Color
     ) {}
 
     public update(force: Vector, deltaTime: number){
@@ -18,9 +17,9 @@ class Particle {
         this.dir =      this.dir.add(force);
         this.prevColor= this.color;
         this.color =    new  Color();
-        this.lifeTime -= deltaTime;
+        this.life -= deltaTime;
     }
     public draw(g : Object){
-        
+
     }
 }
