@@ -9,7 +9,10 @@ class Particle {
         public dir : Vector,
         public life : number,
         public color : Color
-    ) {}
+    ) {
+        this.prevPos = pos;
+        this.prevColor = color;
+    }
 
     public update(force: Vector, deltaTime: number){
         this.prevPos =  this.pos;
@@ -20,6 +23,6 @@ class Particle {
         this.life -= deltaTime;
     }
     public draw(g : Object){
-
+        
     }
 }
