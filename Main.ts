@@ -6,37 +6,43 @@
 (function() {
     var gl, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
     var emitterVertexBuffer;
+    var mvMatrix = mat4.create();
+    var pMatrix = mat4.create();
+
+    var shaderProgram;
 
     function loop(timestamp: number) {
         if(lastFrameTime === undefined) lastFrameTime = timestamp;
         requestAnimationFrame(loop);
+        update(timestamp - lastFrameTime);
         render(timestamp - lastFrameTime);
         lastFrameTime = timestamp;
     }
 
-    function render(deltaTime: number) {
+    function update(deltaTime: number) {
         emitter.update(deltaTime);
-
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        var vertices = emitter.collectDrawData(deltaTime);
-        var vertices = [
-            0.0,  1.0,  0.0,
-            -1.0, -1.0,  0.0,
-            1.0, -1.0,  0.0
-        ];
-        mat4.translate(mvMatrix, mvMatrix, [-1.5, 0.0, -7.0]);
-        gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
-
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(gl.getAttribLocation(shaderProgram, "aVertexPosition"), 3, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(gl.TRIANGLES, 0, vertices.length/3); 
     }
 
-    var shaderProgram;
+    function render(deltaTime: number) {
+        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        mat4.perspective(pMatrix, 45* (Math.PI/180), gl.viewportWidth/gl.viewportHeight, 0.1, 100);
+        mat4.identity(mvMatrix);
+
+        mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -4.0]);
+
+        var vertices = emitter.collectDrawData(deltaTime);
+        console.log(vertices);
+        gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        setMatrixUniforms();
+
+        gl.drawArrays(gl.POINTS, 0, vertices.length/3);
+    }
+
     function initShaders() {
         var fragmentShader = getShader(gl, "shader-fs");
         var vertexShader = getShader(gl, "shader-vs");
@@ -54,6 +60,9 @@
 
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
     }
 
     function getShader(gl, id) {
@@ -90,31 +99,43 @@
         return shader;
     }
 
+    function initGL(canvas) {
+        try {
+            gl = canvas.getContext("experimental-webgl");
+            gl.viewportWidth = canvas.width;
+            gl.viewportHeight = canvas.height;
+        } catch (e) {
+        }
+        if (!gl) {
+            alert("Could not initialise WebGL, sorry :-(");
+        }
+    }
+
+    function setMatrixUniforms() {
+        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+    }
+
+    function initBuffers() {
+        emitterVertexBuffer = gl.createBuffer();
+    }
+
     canvas = <HTMLCanvasElement> document.createElement("canvas");
     canvas.height = 300;
     canvas.width = 512;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
-    gl = canvas.getContext("webgl", {});
-    gl.viewportWidth = canvas.width;
-    gl.viewportHeight = canvas.height;
+    initGL(canvas);
+    initShaders();
+    initBuffers();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    emitter = new Emitter(Vector.Zero, 1000, 5, 1);
 
-    var pMatrix = mat4.create(), mvMatrix = mat4.create();
-
-    mat4.perspective(pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
-    mat4.identity(mvMatrix);
-
-    emitterVertexBuffer = gl.createBuffer();
-
-    initShaders();
-
-    emitter = new Emitter(Vector.Zero, 1000, 5, 5);
+    //render(22);
 
     requestAnimationFrame(loop);
 })();
