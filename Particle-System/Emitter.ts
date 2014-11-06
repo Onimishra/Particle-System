@@ -62,6 +62,10 @@ class Emitter {
             js_vbo.push(v.X());
             js_vbo.push(v.Y());
             js_vbo.push(v.Z());
+            v = p.prevPos;
+            js_vbo.push(v.X());
+            js_vbo.push(v.Y());
+            js_vbo.push(v.Z());
         });
         return js_vbo;
     }

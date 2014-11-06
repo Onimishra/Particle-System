@@ -39,7 +39,7 @@
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         setMatrixUniforms();
 
-            gl.drawArrays(gl.POINTS, 0, vertices.length/3);
+            gl.drawArrays(gl.LINES, 0, vertices.length/3);
     }
 
     function initShaders() {
