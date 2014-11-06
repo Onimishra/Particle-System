@@ -18,6 +18,7 @@
         emitter.update(deltaTime);
 
         var vertices = emitter.collectDrawData(deltaTime);
+        console.log(vertices);
         gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         gl.vertexAttribPointer(gl.getAttribLocation(shaderProgram, "aVertexPosition"), 3, gl.FLOAT, false, 0, 0);
@@ -106,7 +107,7 @@
 
     emitterVertexBuffer = gl.createBuffer();
 
-    emitter = new Emitter(Vector.Zero, 1000, 5, 5);
+    emitter = new Emitter(Vector.Zero, 1000, 2, 1);
 
     requestAnimationFrame(loop);
 })();
