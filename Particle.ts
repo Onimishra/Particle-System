@@ -8,16 +8,17 @@ class Particle {
         public pos : Vector,
         public dir : Vector,
         public life : number,
-        public color : Color
+        public color : Color,
+        public force : Vector
     ) {
         this.prevPos = pos;
         this.prevColor = color;
     }
 
-    public update(force: Vector, deltaTime: number){
+    public update(deltaTime: number){
         this.prevPos =  this.pos;
-        this.pos =      this.pos.add(this.dir);
-        this.dir =      this.dir.add(force);
+        this.pos =      this.pos.add(this.dir.mul(deltaTime));
+        this.dir =      this.dir.add(this.force.mul(deltaTime));
         this.prevColor= this.color;
         this.color =    new  Color();
         this.life -= deltaTime;
