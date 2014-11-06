@@ -1,7 +1,7 @@
 /**
  * Created by mvie on 06/11/14.
  */
-/// <reference path="Emitter.ts" />
+/// <reference path="Particle-System/Emitter.ts" />
 
 (function() {
     var gl, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
