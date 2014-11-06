@@ -18,11 +18,11 @@ class Emitter {
     //Particle customization variables
     private pitch : number = 0;
     private yaw : number = 0;
-    private pitchVar : number = 0;
-    private yawVar : number = 0;
-    private life : number = 0;
+    private pitchVar : number = 45;
+    private yawVar : number = 45;
+    private life : number = 5000;
     private lifeVar : number = 0;
-    private speed : number = 0;
+    private speed : number = 0.1;
     private speedVar : number = 0;
     private force : Vector = Vector.Zero;
 
