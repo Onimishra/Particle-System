@@ -23,6 +23,6 @@ class Particle {
         this.life -= deltaTime;
     }
     public draw(g : Object){
-        
+
     }
 }
