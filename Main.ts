@@ -34,7 +34,7 @@
 
     gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
 
-    emitter = new Emitter(Vector.Zero, 1000, 3, 1);
+    emitter = new Emitter(Vector.Zero, 1000, 5, 5);
 
     requestAnimationFrame(loop);
 })();
