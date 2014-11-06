@@ -2,13 +2,13 @@
 /// <reference path="Color.ts"/>
 
 class Particle {
+    public prevPos : Vector;
+    public prevColor : Color;
     constructor(
         public pos : Vector,
-        public prevPos : Vector,
         public dir : Vector,
         public life : number,
-        public color : Color,
-        public prevColor : Color
+        public color : Color
     ) {}
 
     public update(force: Vector, deltaTime: number){
