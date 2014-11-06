@@ -16,13 +16,13 @@ class Emitter {
         this.nextEmit = 1000/this.rate;
     }
     //Particle customization variables
-    private pitch : number = 0;
+    private pitch : number = Math.PI/2;
     private yaw : number = 0;
-    private pitchVar : number = 45;
-    private yawVar : number = 45;
-    private life : number = 5000;
-    private lifeVar : number = 0;
-    private speed : number = 0.1;
+    private pitchVar : number = Math.PI/2;
+    private yawVar : number = Math.PI/2;
+    private life : number = 2000;
+    private lifeVar : number = 1000;
+    private speed : number = 0.001;
     private speedVar : number = 0;
     private force : Vector = Vector.Zero;
 
@@ -44,7 +44,7 @@ class Emitter {
     private time : number = 0;
     public update(deltaTime : number) {
         this.time += deltaTime;
-        if(this.time > this.nextEmit) {
+        while(this.time > this.nextEmit) {
             this.emit();
             this.time = this.time - this.nextEmit;
             this.nextEmit = 1000/(this.rate + Rng.var(this.rateVar));
