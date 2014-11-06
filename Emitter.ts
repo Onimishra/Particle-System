@@ -47,8 +47,8 @@ class Emitter {
         })
     }
 
-    public draw(deltaTime: number) {
-        var js_vbo = [];
+    public collectDrawData(deltaTime: number) {
+        var js_vbo = [1.0, 1.0, 1.0];
         this.particles.forEach(p => {
             var v = p.collectDrawData();
             js_vbo.push(v.X());
