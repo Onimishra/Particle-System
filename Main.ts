@@ -20,12 +20,17 @@
         render(timestamp - lastFrameTime);
         lastFrameTime = timestamp;
     }
-    var prevDelta = 0;
+    var deltas = [];
+    var deltaI = 0;
+    var deltaSampleLimit = 10;
     function update(deltaTime: number) {
         emitter.update(deltaTime);
 
-        fpsCounter.innerText = (1000/(deltaTime * 0.8 + prevDelta * 0.2)).toFixed(2);
-        prevDelta = deltaTime;
+        deltas[deltaI++] = deltaTime;
+        if(deltaI > deltaSampleLimit) deltaI = 0;
+        var sum = deltas.reduce(function(a, b) { return a + b });
+        var avg = sum / deltas.length;
+        fpsCounter.innerText = (1000/avg).toFixed(2);
 
         pCounter.innerText = emitter.particleCount().toString();
     }
