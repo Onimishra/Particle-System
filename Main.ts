@@ -2,13 +2,11 @@
  * Created by mvie on 06/11/14.
  */
 /// <reference path="Particle-System/Emitter.ts" />
+/// <reference path="Rendering/RenderSystem.ts" />
 
 (function() {
-    var gl, canvas: HTMLCanvasElement, emitter: Emitter, lastFrameTime: number;
-    var emitterVertexBuffer;
-    var mvMatrix = mat4.create();
-    var pMatrix = mat4.create();
-    var shaderProgram;
+    var canvas: HTMLCanvasElement, lastFrameTime: number, emitter, emitter2;
+    var renderSystem : RenderSystem;
 
     var fpsCounter = document.getElementById("fps-counter");
     var pCounter = document.getElementById("particle-counter");
@@ -16,114 +14,21 @@
     function loop(timestamp: number) {
         if(lastFrameTime === undefined) lastFrameTime = timestamp;
         requestAnimationFrame(loop);
-        update(timestamp - lastFrameTime);
-        render(timestamp - lastFrameTime);
+
+        update((timestamp - lastFrameTime)/1000);
+        renderSystem.render((timestamp - lastFrameTime)/1000);
+
         lastFrameTime = timestamp;
     }
     var prevDelta = 0;
     function update(deltaTime: number) {
         emitter.update(deltaTime);
+        emitter2.update(deltaTime);
 
-        fpsCounter.innerText = (1000/(deltaTime * 0.8 + prevDelta * 0.2)).toFixed(2);
+        fpsCounter.innerText = (1/(deltaTime * 0.8 + prevDelta * 0.2)).toFixed(2);
         prevDelta = deltaTime;
 
-        pCounter.innerText = emitter.particleCount().toString();
-    }
-
-    function render(deltaTime: number) {
-        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        mat4.perspective(pMatrix, 45* (Math.PI/180), gl.viewportWidth/gl.viewportHeight, 0.1, 100);
-        mat4.identity(mvMatrix);
-
-        mat4.translate(mvMatrix, mvMatrix, [0.0, -1.0, -4.0]);
-
-        var rO = emitter.collectDrawData(deltaTime);
-        gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.vertices), gl.STATIC_DRAW);
-
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-        setMatrixUniforms();
-
-        gl.drawArrays(gl.LINES, 0, rO.count/3);
-    }
-
-    function initShaders() {
-        var fragmentShader = getShader(gl, "shader-fs");
-        var vertexShader = getShader(gl, "shader-vs");
-
-        shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
-
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        gl.useProgram(shaderProgram);
-
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-    }
-
-    function getShader(gl, id) {
-        var shaderScript = document.getElementById(id);
-        if (!shaderScript) {
-            return null;
-        }
-
-        var str = "";
-        var k = shaderScript.firstChild;
-        while (k) {
-            if (k.nodeType == 3)
-                str += k.textContent;
-            k = k.nextSibling;
-        }
-
-        var shader;
-        if (shaderScript.type == "x-shader/x-fragment") {
-            shader = gl.createShader(gl.FRAGMENT_SHADER);
-        } else if (shaderScript.type == "x-shader/x-vertex") {
-            shader = gl.createShader(gl.VERTEX_SHADER);
-        } else {
-            return null;
-        }
-
-        gl.shaderSource(shader, str);
-        gl.compileShader(shader);
-
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert(gl.getShaderInfoLog(shader));
-            return null;
-        }
-
-        return shader;
-    }
-
-    function initGL(canvas) {
-        try {
-            gl = canvas.getContext("experimental-webgl");
-            gl.viewportWidth = canvas.width;
-            gl.viewportHeight = canvas.height;
-        } catch (e) {
-        }
-        if (!gl) {
-            alert("Could not initialise WebGL, sorry :-(");
-        }
-    }
-
-    function setMatrixUniforms() {
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-    }
-
-    function initBuffers() {
-        emitterVertexBuffer = gl.createBuffer();
+        pCounter.innerText = (emitter.particleCount() + emitter2.particleCount()).toString();
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
@@ -132,14 +37,10 @@
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
-    initGL(canvas);
-    initShaders();
-    initBuffers();
+    renderSystem = new RenderSystem(canvas);
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(gl.DEPTH_TEST);
-
-    emitter = new Emitter(Vector.Zero(), 60000, 300000, 0);
+    emitter = new Emitter(new Vector(-2, 0, -4), 60000, 10000, 0);
+    emitter2 = new Emitter(new Vector(2, 0, -4), 60000, 10000, 0);
 
     requestAnimationFrame(loop);
 })();

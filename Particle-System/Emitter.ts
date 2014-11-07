@@ -1,18 +1,20 @@
 /**
  * Created by mvie on 06/11/14.
  */
+/// <reference path="../Rendering/Renderable.ts" />
 /// <reference path="Particle.ts" />
 /// <reference path="../Utils/Vector.ts" />
 /// <reference path="../Utils/Rng.ts" />
-/// <reference path="../Utils/RenderObject.ts" />
+/// <reference path="../Rendering/RenderObject.ts" />
 
-class Emitter {
+class Emitter extends Renderable {
     constructor(
         private position : Vector,
         private limit : number,
         private rate : number,
         private rateVar : number
     ) {
+        super();
         this.nextEmit = 1000/this.rate;
         this.particles = [];
         this.deadParticles = [];
@@ -24,14 +26,14 @@ class Emitter {
     }
     //Particle customization variables
     private pitch : number = Math.PI/2;
-    private yaw : number = 0;
-    private pitchVar : number = Math.PI/2;
-    private yawVar : number = Math.PI/2;
-    private life : number = 2000;
-    private lifeVar : number = 1000;
-    private speed : number = 0.001;
+    private yaw : number = Math.PI/2;
+    private pitchVar : number = Math.PI/4;
+    private yawVar : number = 0;
+    private life : number = 2;
+    private lifeVar : number = 1;
+    private speed : number = 1;
     private speedVar : number = 0;
-    private force : Vector = Vector.Zero();
+    private force : Vector = new Vector(0, -0.5, 0);
     private ro : RenderObject = new RenderObject();
 
     //System structure variables
@@ -67,7 +69,7 @@ class Emitter {
         while(this.time > this.nextEmit && this.aliveParticles < this.limit) {
             this.emit();
             this.time = this.time - this.nextEmit;
-            this.nextEmit = 1000/(this.rate + Rng.var(this.rateVar));
+            this.nextEmit = 1/(this.rate + Rng.var(this.rateVar));
         }
         var alive, p, i;
         for(i = 0; i < this.limit; i++) {
@@ -96,6 +98,7 @@ class Emitter {
             this.js_vbo[j++] = v.y;
             this.js_vbo[j++] = v.z;
         }
+        this.ro.pos = this.position;
         this.ro.vertices = this.js_vbo;
         this.ro.count = j;
         return this.ro;
