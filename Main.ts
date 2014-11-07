@@ -39,7 +39,7 @@
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         setMatrixUniforms();
 
-            gl.drawArrays(gl.LINES, 0, vertices.length/3);
+        gl.drawArrays(gl.LINES, 0, vertices.length/3);
     }
 
     function initShaders() {
@@ -132,7 +132,7 @@
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    emitter = new Emitter(Vector.Zero, 10000, 15000, 1);
+    emitter = new Emitter(Vector.Zero, 100000, 30000, 1);
 
     //render(22);
 
