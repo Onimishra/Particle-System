@@ -30,7 +30,7 @@
         if(deltaI > deltaSampleLimit) deltaI = 0;
         var sum = deltas.reduce(function(a, b) { return a + b });
         var avg = sum / deltas.length;
-        fpsCounter.innerText = (1000/avg).toFixed(2);
+        fpsCounter.innerText = (1/avg).toFixed(2);
 
         pCounter.innerText = (emitter.particleCount() + emitter2.particleCount()).toString();
     }
