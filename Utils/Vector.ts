@@ -33,11 +33,21 @@ class Vector {
         this.y = v.y;
         this.z = v.z;
     }
+    /* uses (0,0,1) as base
     public static direction(pitch : number, yaw : number) : Vector {
         return new Vector(
             -Math.sin(yaw) * Math.cos(pitch),
             Math.sin(pitch),
             Math.cos(pitch) * Math.cos(yaw)
+        )
+    }
+    */
+    // uses (0,1,0) as base
+    public static direction(pitch : number, yaw : number) : Vector {
+        return new Vector(
+            Math.sin(pitch) * Math.sin(yaw),
+            Math.cos(pitch),
+            -Math.sin(pitch) * Math.cos(yaw)
         )
     }
 
