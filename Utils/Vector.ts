@@ -28,6 +28,11 @@ class Vector {
     public copy() : Vector {
         return new Vector(this.x, this.y, this.z);
     }
+    public set(v : Vector) {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+    }
     public static direction(pitch : number, yaw : number) : Vector {
         return new Vector(
             -Math.sin(yaw) * Math.cos(pitch),

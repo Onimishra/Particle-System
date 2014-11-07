@@ -9,21 +9,26 @@ class Particle {
     public life : number = 0;
     public color : Color;
 
+    public constructor() {
+        this.pos = Vector.Zero();
+        this.prevPos = Vector.Zero();
+    }
+
     public set(pos : Vector, dir : Vector, life : number, color : Color) {
-        this.pos = pos;
+        this.pos.set(pos)
         this.dir = dir;
         this.life = life;
         this.color = color;
-        this.prevPos = pos;
+        this.prevPos.set(pos);
         this.prevColor = color;
     }
 
     public update(deltaTime: number, force : Vector) : boolean {
-        this.prevPos =  this.pos.copy();
+        this.prevPos.set(this.pos);
         this.pos.addmul(this.dir, deltaTime);
         this.dir.addmul(force, deltaTime);
         this.prevColor = this.color;
-        this.color =    new  Color();
+        this.color =    this.color;
         this.life -= deltaTime;
         return this.life > 0;
     }

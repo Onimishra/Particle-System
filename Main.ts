@@ -27,7 +27,7 @@
         fpsCounter.innerText = (1000/(deltaTime * 0.8 + prevDelta * 0.2)).toFixed(2);
         prevDelta = deltaTime;
 
-        pCounter.innerText = emitter.particleCount();
+        pCounter.innerText = emitter.particleCount().toString();
     }
 
     function render(deltaTime: number) {
@@ -39,14 +39,14 @@
 
         mat4.translate(mvMatrix, mvMatrix, [0.0, -1.0, -4.0]);
 
-        var vertices = emitter.collectDrawData(deltaTime);
+        var rO = emitter.collectDrawData(deltaTime);
         gl.bindBuffer(gl.ARRAY_BUFFER, emitterVertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.vertices), gl.STATIC_DRAW);
 
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         setMatrixUniforms();
 
-        gl.drawArrays(gl.LINES, 0, vertices.length/3);
+        gl.drawArrays(gl.LINES, 0, rO.count/3);
     }
 
     function initShaders() {
@@ -127,8 +127,8 @@
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = 500;
-    canvas.width = 1024;
+    canvas.height = 300;
+    canvas.width = 512;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
@@ -139,7 +139,7 @@
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    emitter = new Emitter(Vector.Zero(), 30000, 10000, 0);
+    emitter = new Emitter(Vector.Zero(), 60000, 300000, 0);
 
     requestAnimationFrame(loop);
 })();
