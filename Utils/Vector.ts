@@ -1,20 +1,32 @@
 class Vector {
-    public static Zero : Vector = new Vector(0,0,0);
+    public static Zero() : Vector { return new Vector(0,0,0); }
     public constructor (
-        private x : number,
-        private y : number,
-        private z : number){}
-    public X() { return this.x; }
-    public Y() { return this.y; }
-    public Z() { return this.z; }
-    public add(v : Vector) : Vector {
-        return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
+        public x : number,
+        public y : number,
+        public z : number){}
+    public add(v : Vector) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
     }
-    public sub(v : Vector) : Vector {
-        return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
+    public sub(v : Vector) {
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
     }
-    public mul(a : number) : Vector {
-        return new Vector(this.x * a, this.y * a, this.z * a);
+    public mul(a : number) {
+        this.x *= a;
+        this.y *= a;
+        this.z *= a;
+    }
+    public addmul(v : Vector, a : number) {
+        this.x += v.x * a;
+        this.y += v.y * a;
+        this.z += v.z * a;
+    }
+
+    public copy() : Vector {
+        return new Vector(this.x, this.y, this.z);
     }
     public static direction(pitch : number, yaw : number) : Vector {
         return new Vector(
@@ -23,4 +35,5 @@ class Vector {
             Math.cos(pitch) * Math.cos(yaw)
         )
     }
+
 }

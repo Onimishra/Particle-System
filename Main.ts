@@ -8,8 +8,10 @@
     var emitterVertexBuffer;
     var mvMatrix = mat4.create();
     var pMatrix = mat4.create();
-
     var shaderProgram;
+
+    var fpsCounter = document.getElementById("fps-counter");
+    var pCounter = document.getElementById("particle-counter");
 
     function loop(timestamp: number) {
         if(lastFrameTime === undefined) lastFrameTime = timestamp;
@@ -18,9 +20,14 @@
         render(timestamp - lastFrameTime);
         lastFrameTime = timestamp;
     }
-
+    var prevDelta = 0;
     function update(deltaTime: number) {
         emitter.update(deltaTime);
+
+        fpsCounter.innerText = (1000/(deltaTime * 0.8 + prevDelta * 0.2)).toFixed(2);
+        prevDelta = deltaTime;
+
+        pCounter.innerText = emitter.particleCount();
     }
 
     function render(deltaTime: number) {
@@ -120,8 +127,8 @@
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = 300;
-    canvas.width = 512;
+    canvas.height = 500;
+    canvas.width = 1024;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
@@ -132,9 +139,7 @@
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    emitter = new Emitter(Vector.Zero, 100000, 30000, 1);
-
-    //render(22);
+    emitter = new Emitter(Vector.Zero(), 30000, 10000, 0);
 
     requestAnimationFrame(loop);
 })();
