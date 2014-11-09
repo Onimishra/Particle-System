@@ -4,7 +4,7 @@
 /// <reference path="Particle-System/Emitter.ts" />
 
 (function() {
-    var canvas: HTMLCanvasElement, lastFrameTime: number, emitter, emitter2;
+    var canvas: HTMLCanvasElement, lastFrameTime: number, emitters : Emitter[];
     var renderSystem : RenderSystem;
 
     var fpsCounter = document.getElementById("fps-counter");
@@ -21,30 +21,36 @@
     }
     var deltas = [];
     var deltaI = 0;
-    var deltaSampleLimit = 10;
+    var deltaSampleLimit = 200;
     function update(deltaTime: number) {
-        emitter.update(deltaTime);
-        emitter2.update(deltaTime);
+        //Update emitters
+        emitters.forEach(e => e.update(deltaTime));
 
+        //Calculate moving average for fps counter
         deltas[deltaI++] = deltaTime;
         if(deltaI > deltaSampleLimit) deltaI = 0;
         var sum = deltas.reduce(function(a, b) { return a + b });
         var avg = sum / deltas.length;
-        fpsCounter.innerText = (1/avg).toFixed(2);
+        fpsCounter.innerText = (1/avg).toFixed(0);
 
-        pCounter.innerText = (emitter.particleCount() + emitter2.particleCount()).toString();
+        //Update total particle count
+        pCounter.innerText = emitters.reduce((acc, e) => acc + e.particleCount(), 0).toString();
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = 300;
-    canvas.width = 512;
-    canvas.style.border = "1px solid black";
+    canvas.height = window.innerHeight-6;
+    canvas.width = window.innerWidth;
+    //canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
     renderSystem = new RenderSystem(canvas);
 
-    emitter = new Emitter(new Vector(-2, 0, -4), 60000, 10000, 0);
-    emitter2 = new Emitter(new Vector(2, 0, -4), 60000, 10000, 0);
+    emitters = [];
+    for(var i = -1; i <= -1; i++) {
+        emitters.push(
+            new Emitter(new Vector(i*0.75, 1.5, -5), 37500, 7500, 0)
+        )
+    }
 
     requestAnimationFrame(loop);
 })();

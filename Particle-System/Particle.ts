@@ -12,13 +12,14 @@ class Particle {
     public constructor() {
         this.pos = Vector.Zero();
         this.prevPos = Vector.Zero();
+        this.dir = Vector.Zero();
     }
 
-    public set(pos : Vector, dir : Vector, life : number, color : Color) {
+    public set(pos : Vector, pitch : number, yaw : number, speed : number, life : number, color : Color) {
         this.pos.set(pos)
-        this.dir = dir;
+        this.dir.direction(pitch, yaw, speed);
         this.life = life;
-        this.color = color;
+        //this.color = color;
         this.prevPos.set(pos);
         this.prevColor = color;
     }
@@ -27,8 +28,8 @@ class Particle {
         this.prevPos.set(this.pos);
         this.pos.addmul(this.dir, deltaTime);
         this.dir.addmul(force, deltaTime);
-        this.prevColor = this.color;
-        this.color =    this.color;
+        //this.prevColor = this.color;
+        //this.color =    this.color;
         this.life -= deltaTime;
         return this.life > 0;
     }

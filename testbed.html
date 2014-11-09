@@ -22,9 +22,20 @@
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
       }
     </script>
+    <style>
+        body {
+            margin:0;
+        }
+        #header {
+            position: fixed;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span></p>
+    <div id="header">
+        <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span></p>
+    </div>
     <script src="app.js" ></script>
 </body>
 </html>

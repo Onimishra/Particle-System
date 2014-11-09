@@ -4,6 +4,6 @@
 ///<reference path="../Utils/Vector.ts" />
 class RenderObject {
     pos : Vector;
-    vertices : number[];
+    vertices : Float32Array;
     count : number;
 }
