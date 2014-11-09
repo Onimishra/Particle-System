@@ -14,13 +14,14 @@ class Particle {
     public constructor() {
         this.pos = Vector.Zero();
         this.prevPos = Vector.Zero();
+        this.dir = Vector.Zero();
     }
 
-    public set(pos : Vector, dir : Vector, life : number, startColor : Color, endColor : Color) {
+    public set(pos : Vector, pitch : number, yaw : number, speed : number, life : number, color : Color) {
         this.pos.set(pos)
-        this.dir = dir;
+        this.dir.direction(pitch, yaw, speed);
         this.life = life;
-        this.lifeSpan = life;
+        //this.color = color;
         this.prevPos.set(pos);
         this.startColor = startColor;
         this.endColor = endColor;

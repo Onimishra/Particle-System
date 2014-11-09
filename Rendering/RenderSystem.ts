@@ -34,7 +34,7 @@ class RenderSystem {
     }
 
     private initGL(canvas : HTMLCanvasElement) {
-        var gl = canvas.getContext("webgl");
+        var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
         gl.viewportWidth = canvas.width;
         gl.viewportHeight = canvas.height;
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -122,8 +122,7 @@ class RenderSystem {
             mat4.translate(this.mvMatrix, this.mvMatrix, [rO.pos.x, rO.pos.y, rO.pos.z]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.vertices), gl.STATIC_DRAW);
-            gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+            gl.bufferData(gl.ARRAY_BUFFER, rO.vertices, gl.STATIC_DRAW);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.colors), gl.STATIC_DRAW);

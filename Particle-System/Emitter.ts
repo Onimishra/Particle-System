@@ -18,6 +18,8 @@ class Emitter extends Renderable {
         this.nextEmit = 1000/this.rate;
         this.particles = [];
         this.deadParticles = [];
+
+        this.js_vbo = new Float32Array(this.limit * 6); //3 per particle, both current and prev so 6 in total
         var i;
         for(i = 0; i < limit; i++) {
             this.particles[i] = new Particle();
@@ -25,15 +27,15 @@ class Emitter extends Renderable {
         }
     }
     //Particle customization variables
-    private pitch : number = Math.PI/1.5;
+    private pitch : number = 0;
     private yaw : number = Math.PI/2;
     private pitchVar : number = Math.PI/4;
-    private yawVar : number = Math.PI/4;
-    private life : number = 2;
-    private lifeVar : number = 1;
+    private yawVar : number = 0;
+    private life : number = 5;
+    private lifeVar : number = 0;
     private speed : number = 1;
     private speedVar : number = 0;
-    private force : Vector = new Vector(0, -0.5, 0);
+    private force : Vector = new Vector(0, -1, 0);
     private ro : RenderObject = new RenderObject();
 
     //System structure variables
@@ -47,12 +49,14 @@ class Emitter extends Renderable {
 
     private emit() {
         //console.log(new Date().getTime()/1000);
-        var direction = Vector.direction(this.pitch + Rng.var(this.pitchVar), this.yaw + Rng.var(this.yawVar));
-        direction.mul(this.speed + Rng.var(this.speedVar));
+        //var direction = Vector.direction(this.pitch + Rng.var(this.pitchVar), this.yaw + Rng.var(this.yawVar));
+        //direction.mul(this.speed + Rng.var(this.speedVar));
         var p = this.findDeadParticle();
         p.set(
             this.position,
-            direction,
+            this.pitch + Rng.var(this.pitchVar),
+            this.yaw + Rng.var(this.yawVar),
+            this.speed + Rng.var(this.speedVar),
             this.life + Rng.var(this.lifeVar),
             Color.ORANGE,
             Color.BLUE
