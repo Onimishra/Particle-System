@@ -36,15 +36,15 @@
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = 300;
-    canvas.width = 512;
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
     renderSystem = new RenderSystem(canvas);
 
-    emitter = new Emitter(new Vector(-2, 0, -4), 60000, 10000, 0);
-    emitter2 = new Emitter(new Vector(2, 0, -4), 60000, 10000, 0);
+    emitter = new Emitter(new Vector(-2, 0, -4), 60000, 100000, 0);
+    emitter2 = new Emitter(new Vector(0, 1, -4), 60000, 100000, 0);
 
     requestAnimationFrame(loop);
 })();

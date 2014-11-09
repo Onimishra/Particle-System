@@ -1,15 +1,17 @@
 /**
  * Created by mvie on 07/11/14.
  */
-
+var mat4; // Import the mat4 object from the glMatrix lib.
 class RenderSystem {
     private static instance : RenderSystem;
     private renderQueue : Renderable[] = [];
     private vboQueue = [];
+    private cboQueue = [];
 
     public addRenderable(r : Renderable) {
         this.renderQueue.push(r);
         this.vboQueue.push(this.gl.createBuffer());
+        this.cboQueue.push(this.gl.createBuffer());
     }
 
     public static getInstance() : RenderSystem {
@@ -20,6 +22,7 @@ class RenderSystem {
     private mvMatrix = mat4.create();
     private pMatrix = mat4.create();
     private shaderProgram;
+    private cbo;
 
     constructor(canvas : HTMLCanvasElement) {
         if(RenderSystem.instance != undefined) {
@@ -37,6 +40,8 @@ class RenderSystem {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         this.gl = gl;
+
+        this.cbo = gl.createBuffer();
     }
 
     private initShaders() {
@@ -60,6 +65,9 @@ class RenderSystem {
 
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+        shaderProgram.colorAttribute = gl.getAttribLocation(shaderProgram, "aColor");
+        gl.enableVertexAttribArray(shaderProgram.colorAttribute);
         this.shaderProgram = shaderProgram;
     }
 
@@ -107,6 +115,7 @@ class RenderSystem {
         for(var i in this.renderQueue) {
             var target = this.renderQueue[i];
             var vbo = this.vboQueue[i];
+            var cbo = this.cboQueue[i];
             var rO = target.collectDrawData(deltaTime);
 
             mat4.identity(this.mvMatrix);
@@ -114,9 +123,13 @@ class RenderSystem {
 
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.vertices), gl.STATIC_DRAW);
-
             gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.colors), gl.STATIC_DRAW);
+            gl.vertexAttribPointer(this.shaderProgram.colorAttribute, 4, gl.FLOAT, false, 0, 0);
             this.setMatrixUniforms();
+
 
             gl.drawArrays(gl.LINES, 0, rO.count / 3);
         }

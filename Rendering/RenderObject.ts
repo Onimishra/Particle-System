@@ -5,5 +5,6 @@
 class RenderObject {
     pos : Vector;
     vertices : number[];
+    colors : number[];
     count : number;
 }

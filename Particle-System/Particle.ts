@@ -2,33 +2,35 @@
 /// <reference path="../Utils/Color.ts"/>
 
 class Particle {
-    public prevPos : Vector;
-    public prevColor : Color;
     public pos : Vector;
+    public prevPos : Vector;
     public dir : Vector;
+    public lifeSpan : number = 0;
     public life : number = 0;
-    public color : Color;
+    public startColor : Color;
+    public endColor : Color;
+    public currentColor : Color = new Color(0,0,0);
 
     public constructor() {
         this.pos = Vector.Zero();
         this.prevPos = Vector.Zero();
     }
 
-    public set(pos : Vector, dir : Vector, life : number, color : Color) {
+    public set(pos : Vector, dir : Vector, life : number, startColor : Color, endColor : Color) {
         this.pos.set(pos)
         this.dir = dir;
         this.life = life;
-        this.color = color;
+        this.lifeSpan = life;
         this.prevPos.set(pos);
-        this.prevColor = color;
+        this.startColor = startColor;
+        this.endColor = endColor;
     }
 
     public update(deltaTime: number, force : Vector) : boolean {
         this.prevPos.set(this.pos);
         this.pos.addmul(this.dir, deltaTime);
         this.dir.addmul(force, deltaTime);
-        this.prevColor = this.color;
-        this.color =    this.color;
+        this.currentColor.transition(this.startColor, this.endColor, this.life/this.lifeSpan);
         this.life -= deltaTime;
         return this.life > 0;
     }

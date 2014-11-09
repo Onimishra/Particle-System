@@ -25,10 +25,10 @@ class Emitter extends Renderable {
         }
     }
     //Particle customization variables
-    private pitch : number = Math.PI/2;
+    private pitch : number = Math.PI/1.5;
     private yaw : number = Math.PI/2;
     private pitchVar : number = Math.PI/4;
-    private yawVar : number = 0;
+    private yawVar : number = Math.PI/4;
     private life : number = 2;
     private lifeVar : number = 1;
     private speed : number = 1;
@@ -54,7 +54,8 @@ class Emitter extends Renderable {
             this.position,
             direction,
             this.life + Rng.var(this.lifeVar),
-            Color.WHITE
+            Color.ORANGE,
+            Color.BLUE
         );
         this.aliveParticles++;
     }
@@ -84,8 +85,9 @@ class Emitter extends Renderable {
         }
     }
     private js_vbo = [];
+    private js_cbo = [];
     public collectDrawData(deltaTime: number) : RenderObject {
-        var v, p, i, j = 0;
+        var v : Vector, p: Particle, i : number, j = 0, ci = 0, c : Color;
         for(i=0; i < this.limit; i++) {
             p = this.particles[i];
             if(p.isDead()) continue;
@@ -97,10 +99,22 @@ class Emitter extends Renderable {
             this.js_vbo[j++] = v.x;
             this.js_vbo[j++] = v.y;
             this.js_vbo[j++] = v.z;
+
+            c = p.currentColor;
+            this.js_cbo[ci++] = c.r;
+            this.js_cbo[ci++] = c.g;
+            this.js_cbo[ci++] = c.b;
+            this.js_cbo[ci++] = c.intensity;
+
+            this.js_cbo[ci++] = c.r;
+            this.js_cbo[ci++] = c.g;
+            this.js_cbo[ci++] = c.b;
+            this.js_cbo[ci++] = c.intensity;
         }
         this.ro.pos = this.position;
         this.ro.vertices = this.js_vbo;
         this.ro.count = j;
+        this.ro.colors = this.js_cbo;
         return this.ro;
     }
 }
