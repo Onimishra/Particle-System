@@ -34,7 +34,7 @@
         fpsCounter.innerText = (1/avg).toFixed(0);
 
         //Update total particle count
-        pCounter.innerText = emitters.reduce((acc, e) => acc + e.particleCount(), 0).toString();
+        pCounter.innerText = emitters.reduce((acc : number, e) => acc + e.particleCount(), 0).toString();
     }
 
     canvas = <HTMLCanvasElement> document.createElement("canvas");
@@ -46,7 +46,7 @@
     renderSystem = new RenderSystem(canvas);
 
     emitters = [];
-    for(var i = -1; i <= -1; i++) {
+    for(var i = -1; i <= 3; i++) {
         emitters.push(
             new Emitter(new Vector(i*0.75, 1.5, -5), 37500, 7500, 0)
         )

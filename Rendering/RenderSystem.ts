@@ -123,9 +123,10 @@ class RenderSystem {
 
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
             gl.bufferData(gl.ARRAY_BUFFER, rO.vertices, gl.STATIC_DRAW);
+            gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rO.colors), gl.STATIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, rO.colors, gl.STATIC_DRAW);
             gl.vertexAttribPointer(this.shaderProgram.colorAttribute, 4, gl.FLOAT, false, 0, 0);
             this.setMatrixUniforms();
 

@@ -20,6 +20,7 @@ class Emitter extends Renderable {
         this.deadParticles = [];
 
         this.js_vbo = new Float32Array(this.limit * 6); //3 per particle, both current and prev so 6 in total
+        this.js_cbo = new Float32Array(this.limit * 8); //4 channels per particle
         var i;
         for(i = 0; i < limit; i++) {
             this.particles[i] = new Particle();
@@ -88,8 +89,8 @@ class Emitter extends Renderable {
             }
         }
     }
-    private js_vbo = [];
-    private js_cbo = [];
+    private js_vbo;
+    private js_cbo;
     public collectDrawData(deltaTime: number) : RenderObject {
         var v : Vector, p: Particle, i : number, j = 0, ci = 0, c : Color;
         for(i=0; i < this.limit; i++) {

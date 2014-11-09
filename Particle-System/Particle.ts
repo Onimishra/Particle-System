@@ -17,11 +17,11 @@ class Particle {
         this.dir = Vector.Zero();
     }
 
-    public set(pos : Vector, pitch : number, yaw : number, speed : number, life : number, color : Color) {
+    public set(pos : Vector, pitch : number, yaw : number, speed : number, life : number, startColor : Color, endColor : Color) {
         this.pos.set(pos)
         this.dir.direction(pitch, yaw, speed);
         this.life = life;
-        //this.color = color;
+        this.lifeSpan = life;
         this.prevPos.set(pos);
         this.startColor = startColor;
         this.endColor = endColor;
