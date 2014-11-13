@@ -22,7 +22,6 @@ class RenderSystem {
     private mvMatrix = mat4.create();
     private pMatrix = mat4.create();
     private shaderProgram;
-    private cbo;
 
     constructor(canvas : HTMLCanvasElement) {
         if(RenderSystem.instance != undefined) {
@@ -40,8 +39,6 @@ class RenderSystem {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         this.gl = gl;
-
-        this.cbo = gl.createBuffer();
     }
 
     private initShaders() {
