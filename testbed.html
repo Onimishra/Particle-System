@@ -38,10 +38,15 @@
             position: fixed;
             color: white;
         }
+
+        /* Emitter customizer */
         #options {
             position: fixed;
-            bottom: 0;
-            color: white;
+            right: 0;
+            height: 100%;
+            width: 250px;
+            background-color: rgba(92, 25, 255,0.5);
+            color: black;
         }
         #options label {
             display: inline-block;
@@ -49,6 +54,25 @@
             width: 100px;
             vertical-align: super;
         }
+        #options-toggle {
+            position: relative;
+            top: 50%;
+            left: -25px;
+            width: 50px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        #options .options-open {
+            transform: translate(0px,0px) rotate(180deg);
+        }
+        #options:not(.options-open) {
+            transform: translate(250px,0px) rotate(0deg);
+        }
+        #options, #options-toggle {
+            transition: 0.3s ease-in-out;
+        }
+
     </style>
 </head>
 <body>
@@ -56,10 +80,23 @@
         <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span></p>
     </div>
     <div id="options">
+        <img id="options-toggle" src="UI/arrow.png" />
+        <label for="pitch">Pitch</label>
+        <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01" />
+        <label for="yaw">Yaw</label>
+        <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01" />
         <label for="pitchVar">Pitch Variance</label>
-        <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01" /><br />
+        <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01" />
         <label for="yawVar">Yaw Variance</label>
-        <input id="yawVar"   type="range" min="0" max="3.141592653589793" step="0.01" />
+        <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01" />
+        <label for="life">Life</label>
+        <input id="life" type="range" min="0" max="20" step="0.01" />
+        <label for="lifeVar">Life Variance</label>
+        <input id="lifeVar" type="range" min="0" max="20" step="0.01" />
+        <label for="speed">Speed</label>
+        <input id="speed" type="range" min="0" max="20" step="0.01" />
+        <label for="speedVar">Speed Variance</label>
+        <input id="speedVar" type="range" min="0" max="20" step="0.01" />
     </div>
     <script src="app.js" ></script>
 </body>

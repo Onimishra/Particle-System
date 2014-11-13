@@ -2,6 +2,8 @@
  * Created by mvie on 06/11/14.
  */
 /// <reference path="Particle-System/Emitter.ts" />
+/// <reference path="UI/EmitterCustomizer.ts" />
+
 
 (function() {
     var canvas: HTMLCanvasElement, lastFrameTime: number, emitters : Emitter[];
@@ -57,16 +59,8 @@
         )
     }
 
+    var ui = new EmitterCustomizer(emitters);
 
-    //Tools
-    document.getElementById("pitchVar").onchange = (e : Event) => {
-        var elem = <HTMLInputElement> e.srcElement;
-        emitters[0].pitchVar = parseFloat(elem.value);
-    };
-    document.getElementById("yawVar").onchange = (e : Event) => {
-        var elem = <HTMLInputElement> e.srcElement;
-        emitters[0].yawVar = parseFloat(elem.value);
-    };
 
     requestAnimationFrame(loop);
 })();
