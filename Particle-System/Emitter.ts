@@ -9,49 +9,62 @@
 
 class Emitter extends Renderable {
     constructor(
-        private position : Vector,
+        public position : Vector,
         private limit : number,
-        private rate : number,
-        private rateVar : number
+        options : any
     ) {
         super();
-        this.nextEmit = 1000/this.rate;
-        this.particles = [];
-        this.deadParticles = [];
 
+        this.pitch =    options.pitch ?     options.pitch       : 0;
+        this.pitchVar = options.pitchVar ?  options.pitchVar    : 0;
+        this.yaw =      options.yaw ?       options.yaw         : 0;
+        this.yawVar =   options.yawVar ?    options.yawVar      : 0;
+        this.life =     options.life ?      options.life        : 1;
+        this.lifeVar =  options.lifeVar ?   options.lifeVar     : 0;
+        this.speed =    options.speed ?     options.speed       : 1;
+        this.speedVar = options.speedVar ?  options.speedVar    : 0;
+        this.force =    options.force ?     options.force       : new Vector(0,0,0);
+        this.rate =     options.rate ?      options.rate        : this.limit/this.life;
+        this.rateVar =  options.rateVar ?   options.rateVar     : 0;
+
+        this.nextEmit = 1/this.rate;
         this.js_vbo = new Float32Array(this.limit * 6); //3 per particle, both current and prev so 6 in total
         this.js_cbo = new Float32Array(this.limit * 8); //4 channels per particle
-        var i;
+
+        this.particles = [];
+        this.deadParticles = [];
+        var i, p : Particle;
         for(i = 0; i < limit; i++) {
-            this.particles[i] = new Particle();
-            this.deadParticles[i] = i;
+            p = new Particle();
+            this.particles[i] = p;
+            this.deadParticles[i] = p;
         }
     }
     //Particle customization variables
-    private pitch : number = 0;
-    private yaw : number = Math.PI/2;
-    private pitchVar : number = Math.PI/4;
-    private yawVar : number = 0;
-    private life : number = 5;
-    private lifeVar : number = 0;
-    private speed : number = 1;
-    private speedVar : number = 0;
-    private force : Vector = new Vector(0, -1, 0);
-    private ro : RenderObject = new RenderObject();
+    public rate : number;
+    public rateVar : number;
+    public pitch : number;
+    public yaw : number;
+    public pitchVar : number;
+    public yawVar : number;
+    public life : number;
+    public lifeVar : number;
+    public speed : number;
+    public speedVar : number;
+    public force : Vector;
+
 
     //System structure variables
     private particles : Particle[];
     private aliveParticles : number = 0;
-    private deadParticles : number[];
+    private deadParticles : Particle[];
+    private ro : RenderObject = new RenderObject();
 
     public particleCount() : number {
         return this.aliveParticles;
     }
 
-    private emit() {
-        //console.log(new Date().getTime()/1000);
-        //var direction = Vector.direction(this.pitch + Rng.var(this.pitchVar), this.yaw + Rng.var(this.yawVar));
-        //direction.mul(this.speed + Rng.var(this.speedVar));
+    private emit() : Particle {
         var p = this.findDeadParticle();
         p.set(
             this.position,
@@ -63,32 +76,45 @@ class Emitter extends Renderable {
             Color.BLUE
         );
         this.aliveParticles++;
+        return p;
     }
 
     private findDeadParticle() : Particle {
-        return this.particles[this.deadParticles.pop()];
+        return this.deadParticles.pop();
     }
     private nextEmit : number;
     private time : number = 0;
     public update(deltaTime : number) {
-        this.time += deltaTime;
-        while(this.time > this.nextEmit && this.aliveParticles < this.limit) {
-            this.emit();
-            this.time = this.time - this.nextEmit;
-            this.nextEmit = 1/(this.rate + Rng.var(this.rateVar));
-        }
-        var alive, p, i;
+        var alive, p : Particle, i;
         for(i = 0; i < this.limit; i++) {
             p = this.particles[i];
             if(!p.isDead()) {
                 alive = p.update(deltaTime, this.force);
                 if(!alive) {
-                    this.aliveParticles--;
-                    this.deadParticles.push(i);
+                    this.killParticle(p);
                 }
             }
         }
+        this.time += deltaTime;
+        while(this.time > this.nextEmit && this.aliveParticles < this.limit) {
+            this.time = this.time - this.nextEmit;
+            p = this.emit();
+            p.update(this.time - this.nextEmit, this.force);
+            if(!p.update(this.nextEmit, this.force))
+                this.killParticle(p);
+            this.nextEmit = 1/(this.rate + Rng.var(this.rateVar));
+        }
+        if(this.time > this.nextEmit)
+            this.time = this.time % this.nextEmit;
+
     }
+
+    private killParticle(p : Particle) {
+        this.aliveParticles--;
+        this.deadParticles.push(p);
+    }
+
+
     private js_vbo;
     private js_cbo;
     public collectDrawData(deltaTime: number) : RenderObject {

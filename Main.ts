@@ -37,20 +37,36 @@
         pCounter.innerText = emitters.reduce((acc : number, e) => acc + e.particleCount(), 0).toString();
     }
 
+
+    //Initialization
     canvas = <HTMLCanvasElement> document.createElement("canvas");
-    canvas.height = window.innerHeight-6;
-    canvas.width = window.innerWidth;
-    //canvas.style.border = "1px solid black";
+    canvas.height = document.body.clientHeight;
+    canvas.width = document.body.clientWidth;
     document.body.appendChild(canvas);
+    window.addEventListener("resize", () => {
+        canvas.height = document.body.clientHeight;
+        canvas.width = document.body.clientWidth;
+    });
 
     renderSystem = new RenderSystem(canvas);
 
     emitters = [];
-    for(var i = -1; i <= 3; i++) {
+    for(var i = 0; i < 1; i++) {
         emitters.push(
-            new Emitter(new Vector(i*0.75, 1.5, -5), 37500, 7500, 0)
+            new Emitter(new Vector(0, 0, -5), 10000, {})
         )
     }
+
+
+    //Tools
+    document.getElementById("pitchVar").onchange = (e : Event) => {
+        var elem = <HTMLInputElement> e.srcElement;
+        emitters[0].pitchVar = parseFloat(elem.value);
+    };
+    document.getElementById("yawVar").onchange = (e : Event) => {
+        var elem = <HTMLInputElement> e.srcElement;
+        emitters[0].yawVar = parseFloat(elem.value);
+    };
 
     requestAnimationFrame(loop);
 })();
