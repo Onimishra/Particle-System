@@ -11,6 +11,7 @@
       void main(void) {
         gl_FragColor = color;
       }
+
     </script>
 
     <script id="shader-vs" type="x-shader/x-vertex">
@@ -26,14 +27,16 @@
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
         color = aColor;
       }
+
     </script>
     <style>
         body, html {
-            margin:0;
+            margin: 0;
             height: 100%;
             width: 100%;
             overflow: hidden;
         }
+
         #header {
             position: fixed;
             color: white;
@@ -45,17 +48,36 @@
             right: 0;
             height: 100%;
             width: 250px;
-            background-color: rgba(92, 25, 255,0.5);
+            background-color: rgba(92, 25, 255, 0.5);
             color: black;
+            font-size: 1em;
+            -webkit-text-fill-color: orange;
+            -webkit-text-stroke-width: 0.02em;
+            -webkit-text-stroke-color: black;
         }
+        #options input[type=range] {
+            width: 95%;
+            margin: 4px 2%;
+        }
+        #options select {
+            -webkit-text-fill-color: black;
+            -webkit-text-stroke-width: 0em;
+        }
+
         #options label {
             display: inline-block;
             text-align: left;
-            width: 100px;
-            vertical-align: super;
+            width: 160px;
+            margin-left: 0.3em;
         }
+        #options span.value {
+            display: inline-block;
+            text-align: right;
+            width: 40px;
+        }
+
         #options-toggle {
-            position: relative;
+            position: absolute;
             top: 50%;
             left: -25px;
             width: 50px;
@@ -63,12 +85,13 @@
         }
 
         /* Animations */
-        #options .options-open {
-            transform: translate(0px,0px) rotate(180deg);
-        }
         #options:not(.options-open) {
-            transform: translate(250px,0px) rotate(0deg);
+            transform: translate(250px, 0px);
         }
+        #options-toggle.options-open {
+            transform: rotate(180deg);
+        }
+
         #options, #options-toggle {
             transition: 0.3s ease-in-out;
         }
@@ -76,28 +99,64 @@
     </style>
 </head>
 <body>
-    <div id="header">
-        <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span></p>
+<div id="header">
+    <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span></p>
+</div>
+<div id="options">
+    <img id="options-toggle" src="UI/arrow.png"/>
+    <div id="emitter-selector-container" >
+        <label for="emitter-selector"></label>
+        <select id="emitter-selector"></select>
     </div>
-    <div id="options">
-        <img id="options-toggle" src="UI/arrow.png" />
+    <div id="pitch-container">
         <label for="pitch">Pitch</label>
-        <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01" />
-        <label for="yaw">Yaw</label>
-        <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01" />
-        <label for="pitchVar">Pitch Variance</label>
-        <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01" />
-        <label for="yawVar">Yaw Variance</label>
-        <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01" />
-        <label for="life">Life</label>
-        <input id="life" type="range" min="0" max="20" step="0.01" />
-        <label for="lifeVar">Life Variance</label>
-        <input id="lifeVar" type="range" min="0" max="20" step="0.01" />
-        <label for="speed">Speed</label>
-        <input id="speed" type="range" min="0" max="20" step="0.01" />
-        <label for="speedVar">Speed Variance</label>
-        <input id="speedVar" type="range" min="0" max="20" step="0.01" />
+        <span class="value"></span>
+        <span class="unit">rad</span>
+        <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01"/>
     </div>
-    <script src="app.js" ></script>
+    <div id="yaw-container">
+        <label for="yaw">Yaw</label>
+        <span class="value"></span>
+        <span class="unit">rad</span>
+        <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01"/>
+    </div>
+    <div id="pitchVar-container">
+        <label for="pitchVar">Pitch Var.</label>
+        <span class="value"></span>
+        <span class="unit">rad</span>
+        <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+    </div>
+    <div id="yawVar-container">
+        <label for="yawVar">Yaw Var.</label>
+        <span class="value"></span>
+        <span class="unit">rad</span>
+        <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+    </div>
+    <div id="life-container">
+        <label for="life">Life</label>
+        <span class="value"></span>
+        <span class="unit">s</span>
+        <input id="life" type="range" min="0" max="20" step="0.01"/>
+    </div>
+    <div id="lifeVar-container">
+        <label for="lifeVar">Life Var.</label>
+        <span class="value"></span>
+        <span class="unit">s</span>
+        <input id="lifeVar" type="range" min="0" max="20" step="0.01"/>
+    </div>
+    <div id="speed-container">
+        <label for="speed">Speed</label>
+        <span class="value"></span>
+        <span class="unit">m/s</span>
+        <input id="speed" type="range" min="0" max="20" step="0.01"/>
+    </div>
+    <div id="speedVar-container">
+        <label for="speedVar">Speed Var.</label>
+        <span class="value"></span>
+        <span class="unit">m/s</span>
+        <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
+    </div>
+</div>
+<script src="app.js"></script>
 </body>
 </html>

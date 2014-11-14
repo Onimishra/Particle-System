@@ -55,7 +55,7 @@
     emitters = [];
     for(var i = 0; i < 1; i++) {
         emitters.push(
-            new Emitter(new Vector(0, 0, -5), 10000, {})
+            new Emitter(new Vector(0, 0, -5), 3000, {})
         )
     }
 

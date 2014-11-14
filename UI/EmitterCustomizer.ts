@@ -4,7 +4,7 @@ class EmitterCustomizer {
         this.init();
     }
     private selection : number = 0;
-    private inputs = [
+    private rangeInputs = [
         "pitch",
         "yaw",
         "pitchVar",
@@ -15,12 +15,21 @@ class EmitterCustomizer {
         "speedVar"
     ];
     private init() {
-
-        this.inputs.forEach(id => {
-            this.bind(id);
-            this.set(id);
+        var es = <HTMLSelectElement> document.getElementById("emitter-selector");
+        this.emitters.forEach((e,i) => {
+            var option = document.createElement("option");
+            option.text = "Emitter #"+i;
+            option.value = i.toString();
+            es.add(option);
         });
 
+        //Init input ranges
+        this.rangeInputs.forEach(id => {
+            this.bindRange(id);
+            this.setRangeValue(id);
+            this.setValue(id);
+        });
+        //Options panel toggle
         document.getElementById("options-toggle").onclick = (e : Event) => {
             var toggle = <HTMLImageElement>e.srcElement;
             var panel = <HTMLElement> document.getElementById("options");
@@ -33,14 +42,19 @@ class EmitterCustomizer {
             }
         }
     }
-    private bind(id) {
+    private bindRange(id) {
         document.getElementById(id).oninput = (e : Event) => {
             var elem = <HTMLInputElement> e.srcElement;
             this.emitters[this.selection][id] = parseFloat(elem.value);
+            this.setValue(id);
         };
     }
-    private set(id) {
+    private setRangeValue(id) {
         var e = <HTMLInputElement> document.getElementById(id);
         e.value = this.emitters[this.selection][id];
+    }
+    private setValue(id) {
+        var e = <HTMLElement> document.querySelector("#"+id+"-container .value");
+        e.innerText = this.emitters[this.selection][id];
     }
 }

@@ -70,7 +70,7 @@ class Emitter extends Renderable {
             this.position,
             this.pitch + Rng.var(this.pitchVar),
             this.yaw + Rng.var(this.yawVar),
-            this.speed + Rng.var(this.speedVar),
+            this.speed + Rng.to(this.speedVar),
             this.life + Rng.var(this.lifeVar),
             Color.ORANGE,
             Color.BLUE
