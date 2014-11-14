@@ -76,12 +76,25 @@
             width: 40px;
         }
 
+        #options .vector label {
+            width: 31%;
+        }
+        #options .vector label:not(:first-child) {
+            margin: 0;
+        }
+        #options .vector input {
+            width: 75%;
+        }
         #options-toggle {
             position: absolute;
             top: 50%;
             left: -25px;
             width: 50px;
             cursor: pointer;
+            opacity: 0.25;
+        }
+        #options-toggle:hover {
+            opacity: 1;
         }
 
         /* Animations */
@@ -107,6 +120,20 @@
     <div id="emitter-selector-container" >
         <label for="emitter-selector"></label>
         <select id="emitter-selector"></select>
+    </div>
+    <div id="position-container">
+        <label>Position</label>
+        <div id="position" class="vector">
+            <label>
+                X <input type="number" step="0.05"/>
+            </label>
+            <label>
+                Y <input type="number" step="0.05"/>
+            </label>
+            <label>
+                Z <input type="number" step="0.05"/>
+            </label>
+        </div>
     </div>
     <div id="pitch-container">
         <label for="pitch">Pitch</label>
@@ -155,6 +182,20 @@
         <span class="value"></span>
         <span class="unit">m/s</span>
         <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
+    </div>
+    <div id="force-container">
+        <label>Force</label>
+        <div id="force" class="vector">
+            <label>
+                X <input type="number" step="0.05"/>
+            </label>
+            <label>
+                Y <input type="number" step="0.05"/>
+            </label>
+            <label>
+                Z <input type="number" step="0.05"/>
+            </label>
+        </div>
     </div>
 </div>
 <script src="app.js"></script>

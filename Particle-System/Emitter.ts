@@ -16,8 +16,8 @@ class Emitter extends Renderable {
         super();
 
         this.pitch =    options.pitch ?     options.pitch       : 0;
-        this.pitchVar = options.pitchVar ?  options.pitchVar    : 0;
-        this.yaw =      options.yaw ?       options.yaw         : 0;
+        this.pitchVar = options.pitchVar ?  options.pitchVar    : 1.57; // pi/2
+        this.yaw =      options.yaw ?       options.yaw         : 1.57;
         this.yawVar =   options.yawVar ?    options.yawVar      : 0;
         this.life =     options.life ?      options.life        : 1;
         this.lifeVar =  options.lifeVar ?   options.lifeVar     : 0;

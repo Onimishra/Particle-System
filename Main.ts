@@ -53,9 +53,9 @@
     renderSystem = new RenderSystem(canvas);
 
     emitters = [];
-    for(var i = 0; i < 1; i++) {
+    for(var i = -1; i < 2; i++) {
         emitters.push(
-            new Emitter(new Vector(0, 0, -5), 3000, {})
+            new Emitter(new Vector(i, 0, -5), 3000, {})
         )
     }
 
