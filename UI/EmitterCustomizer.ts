@@ -18,6 +18,10 @@ class EmitterCustomizer {
         "position",
         "force"
     ];
+    private colorInput = [
+        "startColor",
+        "endColor"
+    ];
     private init() {
         var es = <HTMLSelectElement> document.getElementById("emitter-selector");
         this.emitters.forEach((e,i) => {
@@ -35,6 +39,9 @@ class EmitterCustomizer {
             this.vectorInputs.forEach(id => {
                 this.setVectorValue(id);
             });
+            this.colorInput.forEach(id => {
+                this.setColorValue(id);
+            })
         };
 
         //Init input ranges
@@ -47,6 +54,10 @@ class EmitterCustomizer {
         this.vectorInputs.forEach(id => {
             this.bindVector(id);
             this.setVectorValue(id);
+        });
+        this.colorInput.forEach(id => {
+            this.bindColor(id);
+            this.setColorValue(id);
         });
         //Options panel toggle
         document.getElementById("options-toggle").onclick = (e : Event) => {
@@ -72,6 +83,10 @@ class EmitterCustomizer {
         var e = <HTMLInputElement> document.getElementById(id);
         e.value = this.emitters[this.selection][id];
     }
+    private setValue(id) {
+        var e = <HTMLElement> document.querySelector("#"+id+"-container .value");
+        e.innerText = this.emitters[this.selection][id];
+    }
     private bindVector(id) {
         var vector = document.querySelectorAll("#"+id+" input");
         var eVector = <Vector> this.emitters[this.selection][id];
@@ -92,8 +107,20 @@ class EmitterCustomizer {
         setVectorField(<HTMLInputElement>vector[1],"y");
         setVectorField(<HTMLInputElement>vector[2],"z");
     }
-    private setValue(id) {
-        var e = <HTMLElement> document.querySelector("#"+id+"-container .value");
-        e.innerText = this.emitters[this.selection][id];
+    private bindColor(id) {
+        document.getElementById(id).oninput = (e : Event) => {
+            var elem = <HTMLInputElement> e.srcElement;
+            var hex = elem.value;
+            var eColor = <Color> this.emitters[this.selection][id];
+            eColor.r = parseInt(hex.substr(1,2),16);
+            eColor.g = parseInt(hex.substr(3,2),16);
+            eColor.b = parseInt(hex.substr(5,2),16);
+        };
     }
+    private setColorValue(id) {
+        var e = <HTMLInputElement> document.getElementById(id);
+        var eC = <Color> this.emitters[this.selection][id];
+        e.value = "#" + eC.r.toString(16) + eC.g.toString(16) + eC.b.toString(16);
+    }
+
 }
