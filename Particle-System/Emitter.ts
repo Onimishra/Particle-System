@@ -16,8 +16,8 @@ class Emitter extends Renderable {
         super();
 
         this.pitch =    options.pitch ?     options.pitch       : 0;
-        this.pitchVar = options.pitchVar ?  options.pitchVar    : 0;
-        this.yaw =      options.yaw ?       options.yaw         : 0;
+        this.pitchVar = options.pitchVar ?  options.pitchVar    : 1.57; // pi/2
+        this.yaw =      options.yaw ?       options.yaw         : 1.57;
         this.yawVar =   options.yawVar ?    options.yawVar      : 0;
         this.life =     options.life ?      options.life        : 1;
         this.lifeVar =  options.lifeVar ?   options.lifeVar     : 0;
@@ -26,6 +26,8 @@ class Emitter extends Renderable {
         this.force =    options.force ?     options.force       : new Vector(0,0,0);
         this.rate =     options.rate ?      options.rate        : this.limit/this.life;
         this.rateVar =  options.rateVar ?   options.rateVar     : 0;
+        this.startColor = options.startColor ? options.startColor : Color.ORANGE;
+        this.endColor = options.endColor ?  options.endColor    : Color.BLUE;
 
         this.nextEmit = 1/this.rate;
         this.js_vbo = new Float32Array(this.limit * 6); //3 per particle, both current and prev so 6 in total
@@ -52,6 +54,8 @@ class Emitter extends Renderable {
     public speed : number;
     public speedVar : number;
     public force : Vector;
+    public startColor : Color;
+    public endColor : Color;
 
 
     //System structure variables
@@ -70,10 +74,10 @@ class Emitter extends Renderable {
             this.position,
             this.pitch + Rng.var(this.pitchVar),
             this.yaw + Rng.var(this.yawVar),
-            this.speed + Rng.var(this.speedVar),
+            this.speed + Rng.to(this.speedVar),
             this.life + Rng.var(this.lifeVar),
-            Color.ORANGE,
-            Color.BLUE
+            this.startColor,
+            this.endColor
         );
         this.aliveParticles++;
         return p;
