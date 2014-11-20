@@ -89,13 +89,12 @@ class EmitterCustomizer {
     }
     private bindVector(id) {
         var vector = document.querySelectorAll("#"+id+" input");
-        var eVector = <Vector> this.emitters[this.selection][id];
-        function bindVectorField(input : HTMLInputElement, property) {
-            input.oninput = e => eVector[property] = parseFloat(input.value);
-        }
-        bindVectorField(<HTMLInputElement>vector[0],"x");
-        bindVectorField(<HTMLInputElement>vector[1],"y");
-        bindVectorField(<HTMLInputElement>vector[2],"z");
+        var xInput = <HTMLInputElement> vector[0];
+        xInput.oninput = e => this.emitters[this.selection][id].x = parseFloat(xInput.value);
+        var yInput = <HTMLInputElement> vector[1];
+        yInput.oninput = e => this.emitters[this.selection][id].y = parseFloat(yInput.value);
+        var zInput = <HTMLInputElement> vector[2];
+        zInput.oninput = e => this.emitters[this.selection][id].z = parseFloat(zInput.value);
     }
     private setVectorValue(id) {
         var vector = document.querySelectorAll("#"+id+" input");
@@ -112,15 +111,19 @@ class EmitterCustomizer {
             var elem = <HTMLInputElement> e.srcElement;
             var hex = elem.value;
             var eColor = <Color> this.emitters[this.selection][id];
-            eColor.r = parseInt(hex.substr(1,2),16);
-            eColor.g = parseInt(hex.substr(3,2),16);
-            eColor.b = parseInt(hex.substr(5,2),16);
+            //Read hex value, parse hex value as int in radix 16, convert to value between 0 and 1.
+            eColor.r = parseInt(hex.substr(1,2),16) / 255;
+            eColor.g = parseInt(hex.substr(3,2),16) / 255;
+            eColor.b = parseInt(hex.substr(5,2),16) / 255;
         };
     }
     private setColorValue(id) {
         var e = <HTMLInputElement> document.getElementById(id);
         var eC = <Color> this.emitters[this.selection][id];
-        e.value = "#" + eC.r.toString(16) + eC.g.toString(16) + eC.b.toString(16);
+        var r = Math.round(eC.r * 255).toString(16);
+        var g = Math.round(eC.g * 255).toString(16);
+        var b = Math.round(eC.b * 255).toString(16);
+        e.value = "#" + r + g + b;
     }
 
 }

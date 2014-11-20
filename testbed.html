@@ -12,6 +12,7 @@
         gl_FragColor = color;
       }
 
+
     </script>
 
     <script id="shader-vs" type="x-shader/x-vertex">
@@ -27,6 +28,7 @@
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
         color = aColor;
       }
+
 
     </script>
     <style>
@@ -55,10 +57,16 @@
             -webkit-text-stroke-width: 0.02em;
             -webkit-text-stroke-color: black;
         }
+        #options-scroll {
+            overflow: auto;
+            height: 100%;
+        }
+
         #options input[type=range] {
             width: 95%;
             margin: 4px 2%;
         }
+
         #options select {
             -webkit-text-fill-color: black;
             -webkit-text-stroke-width: 0em;
@@ -70,6 +78,7 @@
             width: 160px;
             margin-left: 0.3em;
         }
+
         #options span.value {
             display: inline-block;
             text-align: right;
@@ -79,12 +88,15 @@
         #options .vector label {
             width: 31%;
         }
+
         #options .vector label:not(:first-child) {
             margin: 0;
         }
+
         #options .vector input {
-            width: 75%;
+            width: 70%;
         }
+
         #options-toggle {
             position: absolute;
             top: 50%;
@@ -93,6 +105,7 @@
             cursor: pointer;
             opacity: 0.25;
         }
+
         #options-toggle:hover {
             opacity: 1;
         }
@@ -101,6 +114,7 @@
         #options:not(.options-open) {
             transform: translate(250px, 0px);
         }
+
         #options-toggle.options-open {
             transform: rotate(180deg);
         }
@@ -117,95 +131,99 @@
 </div>
 <div id="options">
     <img id="options-toggle" src="UI/arrow.png"/>
-    <div id="emitter-selector-container" >
-        <label for="emitter-selector"></label>
-        <select id="emitter-selector"></select>
-    </div>
-    <div id="position-container">
-        <label>Position</label>
-        <div id="position" class="vector">
-            <label>
-                X <input type="number" step="0.05"/>
-            </label>
-            <label>
-                Y <input type="number" step="0.05"/>
-            </label>
-            <label>
-                Z <input type="number" step="0.05"/>
-            </label>
-        </div>
-    </div>
-    <div id="pitch-container">
-        <label for="pitch">Pitch</label>
-        <span class="value"></span>
-        <span class="unit">rad</span>
-        <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01"/>
-    </div>
-    <div id="yaw-container">
-        <label for="yaw">Yaw</label>
-        <span class="value"></span>
-        <span class="unit">rad</span>
-        <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01"/>
-    </div>
-    <div id="pitchVar-container">
-        <label for="pitchVar">Pitch Var.</label>
-        <span class="value"></span>
-        <span class="unit">rad</span>
-        <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
-    </div>
-    <div id="yawVar-container">
-        <label for="yawVar">Yaw Var.</label>
-        <span class="value"></span>
-        <span class="unit">rad</span>
-        <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
-    </div>
-    <div id="life-container">
-        <label for="life">Life</label>
-        <span class="value"></span>
-        <span class="unit">s</span>
-        <input id="life" type="range" min="0" max="20" step="0.01"/>
-    </div>
-    <div id="lifeVar-container">
-        <label for="lifeVar">Life Var.</label>
-        <span class="value"></span>
-        <span class="unit">s</span>
-        <input id="lifeVar" type="range" min="0" max="20" step="0.01"/>
-    </div>
-    <div id="speed-container">
-        <label for="speed">Speed</label>
-        <span class="value"></span>
-        <span class="unit">m/s</span>
-        <input id="speed" type="range" min="0" max="20" step="0.01"/>
-    </div>
-    <div id="speedVar-container">
-        <label for="speedVar">Speed Var.</label>
-        <span class="value"></span>
-        <span class="unit">m/s</span>
-        <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
-    </div>
-    <div id="force-container">
-        <label>Force</label>
-        <div id="force" class="vector">
-            <label>
-                X <input type="number" step="0.05"/>
-            </label>
-            <label>
-                Y <input type="number" step="0.05"/>
-            </label>
-            <label>
-                Z <input type="number" step="0.05"/>
-            </label>
-        </div>
-    </div>
-    <div id="startColor-container">
-        <Label for="startColor">Start Color</Label>
-        <input id="startColor" type="color"/>
-    </div>
-    <div id="endColor-container">
-        <Label for="endColor">Start Color</Label>
-        <input id="endColor" type="color" />
-    </div>
 
+    <div id="options-scroll">
+        <div id="emitter-selector-container">
+            <label for="emitter-selector"></label>
+            <select id="emitter-selector"></select>
+        </div>
+        <div id="position-container">
+            <label>Position</label>
+
+            <div id="position" class="vector">
+                <label>
+                    X <input type="number" step="0.05"/>
+                </label>
+                <label>
+                    Y <input type="number" step="0.05"/>
+                </label>
+                <label>
+                    Z <input type="number" step="0.05"/>
+                </label>
+            </div>
+        </div>
+        <div id="pitch-container">
+            <label for="pitch">Pitch</label>
+            <span class="value"></span>
+            <span class="unit">rad</span>
+            <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01"/>
+        </div>
+        <div id="yaw-container">
+            <label for="yaw">Yaw</label>
+            <span class="value"></span>
+            <span class="unit">rad</span>
+            <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01"/>
+        </div>
+        <div id="pitchVar-container">
+            <label for="pitchVar">Pitch Var.</label>
+            <span class="value"></span>
+            <span class="unit">rad</span>
+            <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+        </div>
+        <div id="yawVar-container">
+            <label for="yawVar">Yaw Var.</label>
+            <span class="value"></span>
+            <span class="unit">rad</span>
+            <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+        </div>
+        <div id="life-container">
+            <label for="life">Life</label>
+            <span class="value"></span>
+            <span class="unit">s</span>
+            <input id="life" type="range" min="0" max="20" step="0.01"/>
+        </div>
+        <div id="lifeVar-container">
+            <label for="lifeVar">Life Var.</label>
+            <span class="value"></span>
+            <span class="unit">s</span>
+            <input id="lifeVar" type="range" min="0" max="20" step="0.01"/>
+        </div>
+        <div id="speed-container">
+            <label for="speed">Speed</label>
+            <span class="value"></span>
+            <span class="unit">m/s</span>
+            <input id="speed" type="range" min="0" max="20" step="0.01"/>
+        </div>
+        <div id="speedVar-container">
+            <label for="speedVar">Speed Var.</label>
+            <span class="value"></span>
+            <span class="unit">m/s</span>
+            <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
+        </div>
+        <div id="force-container">
+            <label>Force</label>
+
+            <div id="force" class="vector">
+                <label>
+                    X <input type="number" step="0.05"/>
+                </label>
+                <label>
+                    Y <input type="number" step="0.05"/>
+                </label>
+                <label>
+                    Z <input type="number" step="0.05"/>
+                </label>
+            </div>
+        </div>
+        <div id="startColor-container">
+            <Label for="startColor">Start Color</Label>
+            <input id="startColor" type="color"/>
+        </div>
+        <div id="endColor-container">
+            <Label for="endColor">End Color</Label>
+            <input id="endColor" type="color"/>
+        </div>
+    </div>
 </div>
 <script src="app.js"></script>
 </body>
