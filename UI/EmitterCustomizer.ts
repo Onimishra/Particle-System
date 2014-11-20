@@ -12,7 +12,9 @@ class EmitterCustomizer {
         "life",
         "lifeVar",
         "speed",
-        "speedVar"
+        "speedVar",
+        "rate",
+        "rateVar"
     ];
     private vectorInputs = [
         "position",
@@ -24,12 +26,7 @@ class EmitterCustomizer {
     ];
     private init() {
         var es = <HTMLSelectElement> document.getElementById("emitter-selector");
-        this.emitters.forEach((e,i) => {
-            var option = document.createElement("option");
-            option.text = "Emitter #"+i;
-            option.value = i.toString();
-            es.add(option);
-        });
+        this.setEmitterOptions(es);
         es.onchange = (e : Event) => {
             this.selection = parseInt(es.value);
             this.rangeInputs.forEach(id => {
@@ -42,6 +39,20 @@ class EmitterCustomizer {
             this.colorInput.forEach(id => {
                 this.setColorValue(id);
             })
+        };
+        var removeButton = document.getElementById("emitter-remove");
+        removeButton.onclick = (e) => {
+            this.emitters[this.selection].dispose();
+            this.emitters.splice(this.selection, 1);
+            this.setEmitterOptions(es);
+            this.selection = 0;
+            es.onchange.apply(es);
+        };
+        var addButton = document.getElementById("emitter-add");
+        var capacity = <HTMLInputElement> document.getElementById("capacity");
+        addButton.onclick = (e) => {
+            this.emitters.push(new Emitter(new Vector(0,0,-5), parseInt(capacity.value), {}));
+            this.setEmitterOptions(es);
         };
 
         //Init input ranges
@@ -61,7 +72,7 @@ class EmitterCustomizer {
         });
         //Options panel toggle
         document.getElementById("options-toggle").onclick = (e : Event) => {
-            var toggle = <HTMLImageElement>e.srcElement;
+            var toggle = <HTMLImageElement>e.target;
             var panel = <HTMLElement> document.getElementById("options");
             if(toggle.classList.contains("options-open")) {
                 toggle.classList.remove("options-open");
@@ -72,9 +83,24 @@ class EmitterCustomizer {
             }
         }
     }
+    private setEmitterOptions(selector) {
+        //remove all child nodes
+        var fc = selector.firstChild;
+        while(fc) {
+            selector.removeChild( fc );
+            fc = selector.firstChild;
+        }
+        //add new nodes that correspond with the emitter array.
+        this.emitters.forEach((e,i) => {
+            var option = document.createElement("option");
+            option.text = "Emitter #"+i;
+            option.value = i.toString();
+            selector.add(option);
+        });
+    }
     private bindRange(id) {
         document.getElementById(id).oninput = (e : Event) => {
-            var elem = <HTMLInputElement> e.srcElement;
+            var elem = <HTMLInputElement> e.target;
             this.emitters[this.selection][id] = parseFloat(elem.value);
             this.setValue(id);
         };
@@ -85,7 +111,7 @@ class EmitterCustomizer {
     }
     private setValue(id) {
         var e = <HTMLElement> document.querySelector("#"+id+"-container .value");
-        e.innerText = this.emitters[this.selection][id];
+        e.textContent = this.emitters[this.selection][id];
     }
     private bindVector(id) {
         var vector = document.querySelectorAll("#"+id+" input");
@@ -108,7 +134,7 @@ class EmitterCustomizer {
     }
     private bindColor(id) {
         document.getElementById(id).oninput = (e : Event) => {
-            var elem = <HTMLInputElement> e.srcElement;
+            var elem = <HTMLInputElement> e.target;
             var hex = elem.value;
             var eColor = <Color> this.emitters[this.selection][id];
             //Read hex value, parse hex value as int in radix 16, convert to value between 0 and 1.

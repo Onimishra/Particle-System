@@ -14,20 +14,19 @@ class Emitter extends Renderable {
         options : any
     ) {
         super();
-
-        this.pitch =        options.pitch ?     options.pitch       : 0;
-        this.pitchVar =     options.pitchVar ?  options.pitchVar    : 1.57; // pi/2
-        this.yaw =          options.yaw ?       options.yaw         : 1.57;
-        this.yawVar =       options.yawVar ?    options.yawVar      : 0;
-        this.life =         options.life ?      options.life        : 1;
-        this.lifeVar =      options.lifeVar ?   options.lifeVar     : 0;
-        this.speed =        options.speed ?     options.speed       : 1;
-        this.speedVar =     options.speedVar ?  options.speedVar    : 0;
-        this.force =        options.force ?     options.force       : new Vector(0,0,0);
-        this.rate =         options.rate ?      options.rate        : this.limit/this.life;
-        this.rateVar =      options.rateVar ?   options.rateVar     : 0;
-        this.startColor =   options.startColor? options.startColor  : Color.ORANGE();
-        this.endColor =     options.endColor ?  options.endColor    : Color.BLUE();
+        this.setField(options, "pitch",     0);
+        this.setField(options, "pitchVar",  1.57);
+        this.setField(options, "yaw",       1.57);
+        this.setField(options, "yawVar",    0);
+        this.setField(options, "life",      1);
+        this.setField(options, "lifeVar",   0);
+        this.setField(options, "speed",     1);
+        this.setField(options, "speedVar",  0);
+        this.setField(options, "force",     new Vector(0,0,0));
+        this.setField(options, "rate",      this.limit/this.life);
+        this.setField(options, "rateVar",   0);
+        this.setField(options, "startColor",Color.ORANGE());
+        this.setField(options, "endColor",  Color.BLUE());
 
         this.nextEmit = 1/this.rate;
         this.js_vbo = new Float32Array(this.limit * 6); //3 per particle, both current and prev so 6 in total
@@ -42,6 +41,11 @@ class Emitter extends Renderable {
             this.deadParticles[i] = p;
         }
     }
+    private setField(options, field, defaultVal) {
+        if(options.hasOwnProperty(field)) this[field] = options[field];
+        else this[field] = defaultVal;
+    }
+
     //Particle customization variables
     public rate : number;
     public rateVar : number;
@@ -88,29 +92,33 @@ class Emitter extends Renderable {
     }
     private nextEmit : number;
     private time : number = 0;
+    private timers : number[] = [];
+
+    private debugNextEmit = document.getElementById("next-emit-debug");
     public update(deltaTime : number) {
-        var alive, p : Particle, i;
-        for(i = 0; i < this.limit; i++) {
+        var alive, p:Particle, i;
+        for (i = 0; i < this.limit; i++) {
             p = this.particles[i];
-            if(!p.isDead()) {
+            if (!p.isDead()) {
                 alive = p.update(deltaTime, this.force);
-                if(!alive) {
+                if (!alive) {
                     this.killParticle(p);
                 }
             }
         }
         this.time += deltaTime;
-        while(this.time > this.nextEmit && this.aliveParticles < this.limit) {
+        var offset = Math.min(deltaTime, this.nextEmit);
+        while (this.time > this.nextEmit && this.aliveParticles < this.limit) {
             this.time = this.time - this.nextEmit;
             p = this.emit();
-            p.update(this.time - this.nextEmit, this.force);
-            if(!p.update(this.nextEmit, this.force))
+            p.update(this.time - offset, this.force);
+            if (!p.update(offset, this.force))
                 this.killParticle(p);
-            this.nextEmit = 1/(this.rate + Rng.var(this.rateVar));
+            this.nextEmit = 1 / (this.rate + Rng.to(this.rateVar));
         }
-        if(this.time > this.nextEmit)
+        if (this.time > this.nextEmit)
             this.time = this.time % this.nextEmit;
-
+        document.getElementById("next-emit-debug").textContent = this.time.toString();
     }
 
     private killParticle(p : Particle) {
