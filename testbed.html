@@ -13,6 +13,7 @@
       }
 
 
+
     </script>
 
     <script id="shader-vs" type="x-shader/x-vertex">
@@ -28,6 +29,7 @@
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
         color = aColor;
       }
+
 
 
     </script>
@@ -54,11 +56,13 @@
             color: orange;
             font-size: 1em;
         }
+
         #options-scroll {
             overflow: auto;
             height: 100%;
             -ms-overflow-style: none;
         }
+
         #options-scroll::-webkit-scrollbar {
             display: none;
         }
@@ -123,7 +127,8 @@
 </head>
 <body>
 <div id="header">
-    <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span> NEXTEMIT: <span id="next-emit-debug"></span></p>
+    <p>FPS: <span id="fps-counter"></span> Particles: <span id="particle-counter"></span> NEXTEMIT: <span
+            id="next-emit-debug"></span></p>
 </div>
 <div id="options">
     <img id="options-toggle" src="UI/arrow.png"/>
@@ -142,103 +147,105 @@
                 Capacity <input id="capacity" type="number" step="1" min="1" value="1000"/>
             </label>
         </div>
-        <div id="rate-container">
-            <label for="rate">Rate</label>
-            <span class="value"></span>
-            <span class="unit">p/s</span>
-            <input id="rate" type="range" min="1" max="10000" step="1"/>
-        </div>
-        <div id="rateVar-container">
-            <label for="rate">RateVar</label>
-            <span class="value"></span>
-            <span class="unit">p/s</span>
-            <input id="rateVar" type="range" min="0" max="10000" step="1"/>
-        </div>
-        <div id="position-container">
-            <label>Position</label>
-
-            <div id="position" class="vector">
-                <label>
-                    X <input type="number" step="0.05"/>
-                </label>
-                <label>
-                    Y <input type="number" step="0.05"/>
-                </label>
-                <label>
-                    Z <input type="number" step="0.05"/>
-                </label>
+        <div id="customization-inputs">
+            <div id="rate-container">
+                <label for="rate">Rate</label>
+                <span class="value"></span>
+                <span class="unit">p/s</span>
+                <input id="rate" type="range" min="1" max="10000" step="1"/>
             </div>
-        </div>
-        <div id="pitch-container">
-            <label for="pitch">Pitch</label>
-            <span class="value"></span>
-            <span class="unit">rad</span>
-            <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01"/>
-        </div>
-        <div id="yaw-container">
-            <label for="yaw">Yaw</label>
-            <span class="value"></span>
-            <span class="unit">rad</span>
-            <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01"/>
-        </div>
-        <div id="pitchVar-container">
-            <label for="pitchVar">Pitch Var.</label>
-            <span class="value"></span>
-            <span class="unit">rad</span>
-            <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
-        </div>
-        <div id="yawVar-container">
-            <label for="yawVar">Yaw Var.</label>
-            <span class="value"></span>
-            <span class="unit">rad</span>
-            <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
-        </div>
-        <div id="life-container">
-            <label for="life">Life</label>
-            <span class="value"></span>
-            <span class="unit">s</span>
-            <input id="life" type="range" min="0" max="20" step="0.01"/>
-        </div>
-        <div id="lifeVar-container">
-            <label for="lifeVar">Life Var.</label>
-            <span class="value"></span>
-            <span class="unit">s</span>
-            <input id="lifeVar" type="range" min="0" max="20" step="0.01"/>
-        </div>
-        <div id="speed-container">
-            <label for="speed">Speed</label>
-            <span class="value"></span>
-            <span class="unit">m/s</span>
-            <input id="speed" type="range" min="0" max="20" step="0.01"/>
-        </div>
-        <div id="speedVar-container">
-            <label for="speedVar">Speed Var.</label>
-            <span class="value"></span>
-            <span class="unit">m/s</span>
-            <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
-        </div>
-        <div id="force-container">
-            <label>Force</label>
-
-            <div id="force" class="vector">
-                <label>
-                    X <input type="number" step="0.05"/>
-                </label>
-                <label>
-                    Y <input type="number" step="0.05"/>
-                </label>
-                <label>
-                    Z <input type="number" step="0.05"/>
-                </label>
+            <div id="rateVar-container">
+                <label for="rate">RateVar</label>
+                <span class="value"></span>
+                <span class="unit">p/s</span>
+                <input id="rateVar" type="range" min="0" max="10000" step="1"/>
             </div>
-        </div>
-        <div id="startColor-container">
-            <Label for="startColor">Start Color</Label>
-            <input id="startColor" type="color"/>
-        </div>
-        <div id="endColor-container">
-            <Label for="endColor">End Color</Label>
-            <input id="endColor" type="color"/>
+            <div id="position-container">
+                <label>Position</label>
+
+                <div id="position" class="vector">
+                    <label>
+                        X <input type="number" step="0.05"/>
+                    </label>
+                    <label>
+                        Y <input type="number" step="0.05"/>
+                    </label>
+                    <label>
+                        Z <input type="number" step="0.05"/>
+                    </label>
+                </div>
+            </div>
+            <div id="pitch-container">
+                <label for="pitch">Pitch</label>
+                <span class="value"></span>
+                <span class="unit">rad</span>
+                <input id="pitch" type="range" min="0" max="6.28318530718" step="0.01"/>
+            </div>
+            <div id="yaw-container">
+                <label for="yaw">Yaw</label>
+                <span class="value"></span>
+                <span class="unit">rad</span>
+                <input id="yaw" type="range" min="0" max="6.28318530718" step="0.01"/>
+            </div>
+            <div id="pitchVar-container">
+                <label for="pitchVar">Pitch Var.</label>
+                <span class="value"></span>
+                <span class="unit">rad</span>
+                <input id="pitchVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+            </div>
+            <div id="yawVar-container">
+                <label for="yawVar">Yaw Var.</label>
+                <span class="value"></span>
+                <span class="unit">rad</span>
+                <input id="yawVar" type="range" min="0" max="3.141592653589793" step="0.01"/>
+            </div>
+            <div id="life-container">
+                <label for="life">Life</label>
+                <span class="value"></span>
+                <span class="unit">s</span>
+                <input id="life" type="range" min="0" max="20" step="0.01"/>
+            </div>
+            <div id="lifeVar-container">
+                <label for="lifeVar">Life Var.</label>
+                <span class="value"></span>
+                <span class="unit">s</span>
+                <input id="lifeVar" type="range" min="0" max="20" step="0.01"/>
+            </div>
+            <div id="speed-container">
+                <label for="speed">Speed</label>
+                <span class="value"></span>
+                <span class="unit">m/s</span>
+                <input id="speed" type="range" min="0" max="20" step="0.01"/>
+            </div>
+            <div id="speedVar-container">
+                <label for="speedVar">Speed Var.</label>
+                <span class="value"></span>
+                <span class="unit">m/s</span>
+                <input id="speedVar" type="range" min="0" max="20" step="0.01"/>
+            </div>
+            <div id="force-container">
+                <label>Force</label>
+
+                <div id="force" class="vector">
+                    <label>
+                        X <input type="number" step="0.05"/>
+                    </label>
+                    <label>
+                        Y <input type="number" step="0.05"/>
+                    </label>
+                    <label>
+                        Z <input type="number" step="0.05"/>
+                    </label>
+                </div>
+            </div>
+            <div id="startColor-container">
+                <Label for="startColor">Start Color</Label>
+                <input id="startColor" type="color"/>
+            </div>
+            <div id="endColor-container">
+                <Label for="endColor">End Color</Label>
+                <input id="endColor" type="color"/>
+            </div>
         </div>
     </div>
 </div>

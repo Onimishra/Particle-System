@@ -4,6 +4,7 @@ class EmitterCustomizer {
         this.init();
     }
     private selection : number = 0;
+    private inputsEnabled = true;
     private rangeInputs = [
         "pitch",
         "yaw",
@@ -27,7 +28,16 @@ class EmitterCustomizer {
     private init() {
         var es = <HTMLSelectElement> document.getElementById("emitter-selector");
         this.setEmitterOptions(es);
+        var rateInput = <HTMLInputElement> document.getElementById("rate");
+        var rateVarInput = <HTMLInputElement> document.getElementById("rateVar");
         es.onchange = (e : Event) => {
+            var sv = es.value;
+            //in case there is no options we disable the inputs, and re-enable if they are disabled and there is an option.
+            if(sv === "") {
+                this.enableInput(false);
+                return;
+            } else if(!this.inputsEnabled) this.enableInput(true);
+
             this.selection = parseInt(es.value);
             this.rangeInputs.forEach(id => {
                 this.setRangeValue(id);
@@ -38,7 +48,10 @@ class EmitterCustomizer {
             });
             this.colorInput.forEach(id => {
                 this.setColorValue(id);
-            })
+            });
+            var max = this.emitters[this.selection].capacity().toString();
+            rateInput.max = max;
+            rateVarInput.max = max;
         };
         var removeButton = document.getElementById("emitter-remove");
         removeButton.onclick = (e) => {
@@ -49,10 +62,12 @@ class EmitterCustomizer {
             es.onchange.apply(es);
         };
         var addButton = document.getElementById("emitter-add");
-        var capacity = <HTMLInputElement> document.getElementById("capacity");
-        addButton.onclick = (e) => {
+        addButton.onclick = () => {
+            var capacity = <HTMLInputElement> document.getElementById("capacity");
+
             this.emitters.push(new Emitter(new Vector(0,0,-5), parseInt(capacity.value), {}));
             this.setEmitterOptions(es);
+            es.onchange.apply(es);
         };
 
         //Init input ranges
@@ -150,6 +165,14 @@ class EmitterCustomizer {
         var g = Math.round(eC.g * 255).toString(16);
         var b = Math.round(eC.b * 255).toString(16);
         e.value = "#" + r + g + b;
+    }
+
+    private enableInput(enabled) {
+        var inputs = <NodeList> document.querySelectorAll("#customization-inputs input");
+        for(var i=0; i<inputs.length; i++) {
+            (<HTMLInputElement> inputs[i]).disabled = !enabled;
+        }
+        this.inputsEnabled = enabled;
     }
 
 }

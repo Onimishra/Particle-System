@@ -71,6 +71,9 @@ class Emitter extends Renderable {
     public particleCount() : number {
         return this.aliveParticles;
     }
+    public capacity() : number {
+        return this.limit;
+    }
 
     private emit() : Particle {
         var p = this.findDeadParticle();
@@ -92,9 +95,7 @@ class Emitter extends Renderable {
     }
     private nextEmit : number;
     private time : number = 0;
-    private timers : number[] = [];
 
-    private debugNextEmit = document.getElementById("next-emit-debug");
     public update(deltaTime : number) {
         var alive, p:Particle, i;
         for (i = 0; i < this.limit; i++) {
@@ -118,7 +119,6 @@ class Emitter extends Renderable {
         }
         if (this.time > this.nextEmit)
             this.time = this.time % this.nextEmit;
-        document.getElementById("next-emit-debug").textContent = this.time.toString();
     }
 
     private killParticle(p : Particle) {
