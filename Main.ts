@@ -33,10 +33,10 @@
         if(deltaI > deltaSampleLimit) deltaI = 0;
         var sum = deltas.reduce(function(a, b) { return a + b });
         var avg = sum / deltas.length;
-        fpsCounter.innerText = (1/avg).toFixed(0);
+        fpsCounter.textContent = (1/avg).toFixed(0);
 
         //Update total particle count
-        pCounter.innerText = emitters.reduce((acc : number, e) => acc + e.particleCount(), 0).toString();
+        pCounter.textContent = emitters.reduce((acc : number, e) => acc + e.particleCount(), 0).toString();
     }
 
 
@@ -51,11 +51,11 @@
     });
 
     renderSystem = new RenderSystem(canvas);
-
+    var debugOptions = {};
     emitters = [];
-    for(var i = -1; i < 2; i++) {
+    for(var i = -1; i < 0; i++) {
         emitters.push(
-            new Emitter(new Vector(i, 0, -5), 3000, {})
+            new Emitter(new Vector(i, 0, -5), 3000, debugOptions)
         )
     }
 

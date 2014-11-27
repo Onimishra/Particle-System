@@ -10,4 +10,7 @@ class Renderable {
     public collectDrawData(deltaTime : number) : RenderObject {
         throw new Error("This abstract method has not been implemented");
     }
+    public dispose() {
+        RenderSystem.getInstance().removeRenderable(this);
+    }
 }

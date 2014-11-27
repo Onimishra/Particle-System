@@ -13,6 +13,14 @@ class RenderSystem {
         this.vboQueue.push(this.gl.createBuffer());
         this.cboQueue.push(this.gl.createBuffer());
     }
+    public removeRenderable(r : Renderable) {
+        var i = this.renderQueue.indexOf(r);
+        this.renderQueue.splice(i,1);
+        this.gl.deleteBuffer(this.vboQueue[i]);
+        this.vboQueue.splice(i,1);
+        this.gl.deleteBuffer(this.cboQueue[i]);
+        this.cboQueue.splice(i,1);
+    }
 
     public static getInstance() : RenderSystem {
         return RenderSystem.instance;
