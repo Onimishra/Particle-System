@@ -44,6 +44,34 @@
     canvas = <HTMLCanvasElement> document.createElement("canvas");
     canvas.height = document.body.clientHeight;
     canvas.width = document.body.clientWidth;
+
+    // Pointer Lock
+    canvas.requestPointerLock = canvas.requestPointerLock ||
+        canvas.mozRequestPointerLock ||
+        canvas.webkitRequestPointerLock;
+    canvas.addEventListener("click", () => {
+        canvas.requestPointerLock();
+    });
+    var mousemove = function(e) {
+        console.log(e.movementX + " - " + e.movementY);
+    };
+    var pointerLockChangeEvent = () => {
+        console.log("pointer change");
+        if(document.pointerLockElement === canvas ||
+            document.mozPointerLockElement === canvas ||
+            document.webkitPointerLockElement === canvas) {
+            console.log("captured");
+            canvas.addEventListener("mousemove", mousemove);
+            return;
+        }
+        console.log("exit");
+        canvas.removeEventListener("mousemove", mousemove);
+    };
+    document.addEventListener("pointerlockchange", pointerLockChangeEvent);
+    document.addEventListener("mozpointerlockchange", pointerLockChangeEvent);
+    document.addEventListener("webkitpointerlockchange", pointerLockChangeEvent);
+    // End Pointer Lock
+
     document.body.appendChild(canvas);
     window.addEventListener("resize", () => {
         canvas.height = document.body.clientHeight;
