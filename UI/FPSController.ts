@@ -1,62 +1,112 @@
 /// <reference path="../Rendering/Camera.ts" />
 class FPSController extends Camera {
-    private sensivity : number = 0.1;
+    private sensivity : number = 0.01;
+    private speed : number = 2;
     private v : Vector = Vector.Zero();
     private u : Vector = Vector.Zero();
-    private speed : number;
+    private keys : number[] = [];
+
+    public constructor(canvas) {
+        super();
+        // Pointer Lock
+        canvas.requestPointerLock = canvas.requestPointerLock ||
+        canvas.mozRequestPointerLock ||
+        canvas.webkitRequestPointerLock;
+        canvas.addEventListener("click", () => {
+            canvas.requestPointerLock();
+        });
+        var mousemove = (e) => {
+            this.mouseEvent(e.movementX, e.movementY);
+        };
+        var _keyDown = (e) => {
+            this.keyDown(e);
+        };
+        var _keyUp = (e) => {
+            this.keyUp(e);
+        };
+        var pointerLockChangeEvent = () => {
+            console.log("pointer change");
+            if(document.pointerLockElement === canvas ||
+                document.mozPointerLockElement === canvas ||
+                document.webkitPointerLockElement === canvas) {
+                console.log("captured");
+                window.addEventListener("keydown", _keyDown);
+                window.addEventListener("keyup", _keyUp);
+                canvas.addEventListener("mousemove", mousemove);
+                return;
+            }
+            console.log("exit");
+            window.removeEventListener("keydown", _keyDown);
+            window.removeEventListener("keyup", _keyUp);
+            canvas.removeEventListener("mousemove", mousemove);
+        };
+        document.addEventListener("pointerlockchange", pointerLockChangeEvent);
+        document.addEventListener("mozpointerlockchange", pointerLockChangeEvent);
+        document.addEventListener("webkitpointerlockchange", pointerLockChangeEvent);
+        // End Pointer Lock
+        console.log(this.u);
+    }
+
+    public update(deltaTime) {
+        this.v.set(this.u);
+        this.v.rotate(this.pitch, this.yaw);
+        this.eye.addmul(this.v, deltaTime);
+    }
+
     private mouseEvent = function(mX, mY) {
         this.yaw    += mX * this.sensivity;
         this.pitch  += mY * this.sensivity;
     };
 
-    public update(deltaTime) {
-        this.v.set(this.u.x, this.u.y, this.u.z);
-        this.v.rotate(this.pitch, this.yaw);
-        this.eye.addmul(this.v, deltaTime);
-    }
-
-    private keyDown = function(event) {
-        switch (event.key) {
-            case 'w':
+    private keyDown(event) {
+        console.log(this.keys.indexOf(event.which));
+        if(this.keys.indexOf(event.which) != -1)
+            return;
+        switch (event.which) {
+            case 87: //w
                 this.u.z += this.speed;
                 break;
-            case 'a':
-                this.u.x += -this.speed;
-                break;
-            case 's':
-                this.u.z += -this.speed;
-                break;
-            case 'd':
+            case 65: //a
                 this.u.x += this.speed;
                 break;
-            case 'q':
+            case 83: //s
+                this.u.z += -this.speed;
+                break;
+            case 68: //d
+                this.u.x += -this.speed;
+                break;
+            case 81: //q
                 this.u.y += this.speed;
                 break;
-            case 'e':
+            case 69: //e
                 this.u.y += -this.speed;
                 break;
         }
-    };
+        this.keys.push(event.which);
+        console.log(event.which, this.u);
+    }
     private keyUp = function(event) {
-        switch(event.key) {
-            case 'w':
+        switch(event.which) {
+            case 87: //w
                 this.u.z -= this.speed;
                 break;
-            case 'a':
-                this.u.x -= -this.speed;
-                break;
-            case 's':
-                this.u.z -= -this.speed;
-                break;
-            case 'd':
+            case 65: //a
                 this.u.x -= this.speed;
                 break;
-            case 'q':
+            case 83: //s
+                this.u.z -= -this.speed;
+                break;
+            case 68: //d
+                this.u.x -= -this.speed;
+                break;
+            case 81: //q
                 this.u.y -= this.speed;
                 break;
-            case 'e':
+            case 69: //e
                 this.u.y -= -this.speed;
                 break;
         }
+        console.log(this.keys.indexOf(event.which));
+        this.keys.splice(this.keys.indexOf(event.which), 1);
     }
 }

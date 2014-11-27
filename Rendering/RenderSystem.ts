@@ -119,7 +119,7 @@ class RenderSystem {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(this.pMatrix, 45* (Math.PI/180), gl.viewportWidth/gl.viewportHeight, 0.1, 100);
-        this.camera.update();
+        this.camera.update(deltaTime);
         this.setViewMatrix(this.camera);
         for(var i in this.renderQueue) {
             var target = this.renderQueue[i];
@@ -128,8 +128,8 @@ class RenderSystem {
             var rO = target.collectDrawData(deltaTime);
 
             mat4.identity(this.mvMatrix);
-            mat4.multiply(this.mvMatrix, this.vMatrix, this.mvMatrix);
             mat4.translate(this.mvMatrix, this.mvMatrix, [rO.pos.x, rO.pos.y, rO.pos.z]);
+            mat4.multiply(this.mvMatrix, this.vMatrix, this.mvMatrix);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
             gl.bufferData(gl.ARRAY_BUFFER, rO.vertices, gl.STATIC_DRAW);
@@ -168,6 +168,7 @@ class RenderSystem {
             xaxis.z,            yaxis.z,            zaxis.z,            0,
            -xaxis.dot(c.eye),  -yaxis.dot(c.eye),  -zaxis.dot(c.eye),   1
         ]);
+        mat4.invert(this.vMatrix, this.vMatrix);
     }
 
 }
