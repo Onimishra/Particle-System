@@ -34,6 +34,17 @@ class Vector {
         this.z = v.z;
     }
 
+    public dot(v : Vector) : number {
+        return this.x*v.x + this.y*v.y + this.z*v.z;
+    }
+
+    public rotate(pitch : number, yaw : number) {
+        var x = this.x; var y = this.y; var z = this.z; var sin = Math.sin; var cos = Math.cos;
+        this.x = x * cos(yaw) + y *  sin(pitch)* sin(yaw) +  z * -sin(yaw) * cos(pitch);
+        this.y =                y *  cos(pitch)           +  z *  sin(pitch);
+        this.z = x * sin(yaw) + y * -sin(pitch)* cos(yaw) +  z *  cos(pitch) * cos(yaw);
+    }
+
     public direction(pitch : number, yaw : number, speed : number) {
         this.x = Math.sin(pitch) * Math.sin(yaw) * speed;
         this.y = Math.cos(pitch) * speed;

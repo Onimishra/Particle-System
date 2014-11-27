@@ -79,11 +79,11 @@
     });
 
     renderSystem = new RenderSystem(canvas);
-    var debugOptions = {};
+    var debugOptions = { life: 3, pitchVar: Math.PI, yawVar: Math.PI };
     emitters = [];
     for(var i = -1; i < 0; i++) {
         emitters.push(
-            new Emitter(new Vector(i, 0, -5), 3000, debugOptions)
+            new Emitter(new Vector(i, 0, -5), 100000, debugOptions)
         )
     }
 

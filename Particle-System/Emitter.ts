@@ -1,6 +1,3 @@
-/**
- * Created by mvie on 06/11/14.
- */
 /// <reference path="../Rendering/Renderable.ts" />
 /// <reference path="Particle.ts" />
 /// <reference path="../Utils/Vector.ts" />

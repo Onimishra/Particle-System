@@ -1,7 +1,3 @@
-/**
- * Created by mvie on 06/11/14.
- */
-
 class Color {
     static WHITE = () => new Color(1.0, 1.0, 1.0);
     static BLUE = () => new Color(0.1, 0.1, 1.0);

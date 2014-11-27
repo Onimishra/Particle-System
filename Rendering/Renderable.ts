@@ -1,6 +1,3 @@
-/**
- * Created by mvie on 07/11/14.
- */
 ///<reference path="RenderObject.ts" />
 ///<reference path="RenderSystem.ts" />
 class Renderable {
