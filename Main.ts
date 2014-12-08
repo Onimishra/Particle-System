@@ -54,11 +54,11 @@
     var camera = new FPSController(canvas);
 
     renderSystem = new RenderSystem(canvas, camera);
-    var debugOptions = { life: 3, pitchVar: Math.PI, yawVar: Math.PI };
+    var debugOptions = { life: 3, pitchVar: 3.14, yawVar: 3.14 };
     emitters = [];
     for(var i = -1; i < 0; i++) {
         emitters.push(
-            new Emitter(new Vector(i, 0, -5), 100000, debugOptions)
+            new Emitter(new Vector(i, 0, -5), 10000, debugOptions)
         )
     }
 

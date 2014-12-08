@@ -12,15 +12,15 @@ class Emitter extends Renderable {
     ) {
         super();
         this.setField(options, "pitch",     0);
-        this.setField(options, "pitchVar",  1.57);
-        this.setField(options, "yaw",       1.57);
+        this.setField(options, "pitchVar",  0);
+        this.setField(options, "yaw",       0);
         this.setField(options, "yawVar",    0);
         this.setField(options, "life",      1);
         this.setField(options, "lifeVar",   0);
         this.setField(options, "speed",     1);
         this.setField(options, "speedVar",  0);
         this.setField(options, "force",     new Vector(0,0,0));
-        this.setField(options, "rate",      this.limit/this.life);
+        this.setField(options, "rate",      Math.floor(this.limit/this.life));
         this.setField(options, "rateVar",   0);
         this.setField(options, "startColor",Color.ORANGE());
         this.setField(options, "endColor",  Color.BLUE());
@@ -76,10 +76,10 @@ class Emitter extends Renderable {
         var p = this.findDeadParticle();
         p.set(
             this.position,
-            this.pitch + Rng.var(this.pitchVar),
-            this.yaw + Rng.var(this.yawVar),
+            this.pitch + Rng.to(this.pitchVar),
+            this.yaw + Rng.to(this.yawVar),
             this.speed + Rng.to(this.speedVar),
-            this.life + Rng.var(this.lifeVar),
+            this.life + Rng.to(this.lifeVar),
             this.startColor,
             this.endColor
         );
